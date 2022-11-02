@@ -21,6 +21,14 @@ set(CUDA_TOOLKIT_ROOT_DIR     "/usr/local/cuda-11.1")
 set(CUDNN_DIR    "/usr/local/cudnn8.0.4")
 set(TENSORRT_DIR "/env/TensorRT-7.2.3.4")
 
+# set(CUDA_TOOLKIT_ROOT_DIR     "/data/sxai/lean/cuda-10.2")
+# set(CUDNN_DIR    "/data/sxai/lean/cudnn7.6.5.32-cuda10.2")
+# set(TENSORRT_DIR "/data/sxai/lean/TensorRT-7.0.0.11")
+
+# set(CUDA_TOOLKIT_ROOT_DIR  "/data/sxai/lean/cuda-11.1")
+# set(CUDNN_DIR    "/data/sxai/lean/cudnn8.2.2.26")
+# set(TENSORRT_DIR "/data/sxai/lean/TensorRT-7.2.1.6")
+
 # 因为protobuf，需要用特定版本，所以这里指定路径
 # 我直接把protobuf-3.11.4安装到/usr/local/路径下了(protobuf源码安装时make install)
 set(PROTOBUF_DIR "/usr/local")
@@ -31,8 +39,11 @@ find_package(OpenCV)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
+    # ${PROJECT_SOURCE_DIR}/src/application
     ${PROJECT_SOURCE_DIR}/src/tensorRT
     ${PROJECT_SOURCE_DIR}/src/tensorRT/common
+    ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/include
+    ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/src/plugin/common
     ${OpenCV_INCLUDE_DIRS}
     ${CUDA_TOOLKIT_ROOT_DIR}/include
     ${PROTOBUF_DIR}/include
@@ -84,4 +95,3 @@ if("${HAS_PYTHON}" STREQUAL "ON")
     target_link_libraries(pytrtc "${PythonName}")
     target_link_libraries(pro "${PythonName}")
 endif()
-

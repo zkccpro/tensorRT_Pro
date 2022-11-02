@@ -1,6 +1,7 @@
 #include <builder/trt_builder.hpp>
 #include <infer/trt_infer.hpp>
 #include <opencv2/opencv.hpp>
+#include <plugin/amirInferPlugin.h>
 
 int main() {
     // // convert onnx to trt
@@ -13,7 +14,8 @@ int main() {
     // );
 
     // load model and get a shared_ptr. get nullptr if fail to load.
-    auto engine = TRT::load_infer("/zkcc_workspace/model/trt/mobilenet.trt");
+    initLibAmirstanInferPlugins();
+    auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
 
     // print model info
     engine->print();
