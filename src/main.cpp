@@ -1,93 +1,43 @@
+#include <builder/trt_builder.hpp>
+#include <infer/trt_infer.hpp>
+#include <opencv2/opencv.hpp>
 
-#include <stdio.h>
-#include <string.h>
-#include <common/ilogger.hpp>
-#include <functional>
+int main() {
+    // // convert onnx to trt
+    // TRT::compile(
+    //     TRT::Mode::FP32,            // compile model in fp32
+    //     1,                          // max batch size
+    //     "/zkcc_workspace/model/onnx/faster_rcnn.onnx",              // onnx file
+    //     "/zkcc_workspace/model/trt/faster_rcnn_epoch_49.trt",     // save path
+    //     {{{1, 3, 2016, 2016}}}                          //  redefine the shape of input when needed
+    // );
 
-int app_yolo();
-int app_yolo_gpuptr();
-int app_alphapose();
-int app_fall_recognize();
-int app_retinaface();
-int app_arcface();
-int app_arcface_video();
-int app_arcface_tracker();
-int app_scrfd();
-int app_high_performance();
-int app_lesson();
-int app_plugin();    
-int app_yolo_fast();
-int app_centernet();
-int app_dbface();
-int app_bert();
-int direct_yolo();
-int direct_unet();
-int direct_mae();
-int direct_classifier();
-int test_warpaffine();
-int test_yolo_map();
+    // load model and get a shared_ptr. get nullptr if fail to load.
+    auto engine = TRT::load_infer("/zkcc_workspace/model/trt/mobilenet.trt");
 
-int main(int argc, char** argv){
-    
-    const char* method = "yolo";
-    if(argc > 1){
-        method = argv[1];
-    }
+    // print model info
+    engine->print();
 
-    if(strcmp(method, "yolo") == 0){
-        app_yolo();
-    }else if(strcmp(method, "yolo_gpuptr") == 0){
-        app_yolo_gpuptr();
-    }else if(strcmp(method, "yolo_fast") == 0){
-        app_yolo_fast();
-    }else if(strcmp(method, "dyolo") == 0){
-        direct_yolo();
-    }else if(strcmp(method, "dunet") == 0){
-        direct_unet();
-    }else if(strcmp(method, "dmae") == 0){
-        direct_mae();
-    }else if(strcmp(method, "dclassifier") == 0){
-        direct_classifier();
-    }else if(strcmp(method, "bert") == 0){
-        app_bert();
-    }else if(strcmp(method, "centernet") == 0){
-        app_centernet();
-    }else if(strcmp(method, "dbface") == 0){
-        app_dbface();
-    }else if(strcmp(method, "alphapose") == 0){
-        app_alphapose();
-    }else if(strcmp(method, "fall_recognize") == 0){
-        app_fall_recognize();
-    }else if(strcmp(method, "retinaface") == 0){
-        app_retinaface(); 
-    }else if(strcmp(method, "arcface") == 0){
-        app_arcface();
-    }else if(strcmp(method, "arcface_video") == 0){
-        app_arcface_video();
-    }else if(strcmp(method, "arcface_tracker") == 0){
-        app_arcface_tracker();
-    }else if(strcmp(method, "scrfd") == 0){
-        app_scrfd();
-    }else if(strcmp(method, "test_warpaffine") == 0){
-        test_warpaffine();
-    }else if(strcmp(method, "test_yolo_map") == 0){
-        test_yolo_map();
-    }else if(strcmp(method, "high_perf") == 0){
-        app_high_performance();
-    }else if(strcmp(method, "lesson") == 0){
-        app_lesson();
-    }else if(strcmp(method, "plugin") == 0){
-        app_plugin();
-    }else{
-        printf("Unknow method: %s\n", method);
-        printf(
-            "Help: \n"
-            "    ./pro method[yolo、alphapose、fall、retinaface、arcface、arcface_video、arcface_tracker]\n"
-            "\n"
-            "    ./pro yolo\n"
-            "    ./pro alphapose\n"
-            "    ./pro fall\n"
-        );
-    } 
+    // load image
+    auto image = cv::imread("/zkcc_workspace/data/data_cizhuan/coco/train2017/20220310124752-origin.jpg");
+    cv::resize(image, image, cv::Size(2016, 2016));
+
+    // get the model input and output node, which can be accessed by name or index
+    auto input = engine->input(0);   // or auto input = engine->input("images");
+    auto output = engine->output(0); // or auto output = engine->output("output");
+
+    // put the image into input tensor by calling set_norm_mat()
+    float mean[] = {0, 0, 0};
+    float std[]  = {1, 1, 1};
+    input->set_norm_mat(0, image, mean, std);
+
+    // do the inference. Here sync(true) or async(false) is optional
+    engine->forward(); // engine->forward(true or false)
+
+    // get the outut_ptr, which can used to access the output
+    float* output_ptr = output->cpu<float>();
+    std::cout << *output_ptr << std::endl;
+
     return 0;
 }
+

@@ -49,6 +49,7 @@ tutorial/2.0CenterNet_from_torch_trt/0_to_1_python_to_cuda/cpp_cuda_centernet/wo
 
 *.trtmodel
 *.onnx
+/workspace
 /workspace/pro
 /build
 /workspace/*.avi
