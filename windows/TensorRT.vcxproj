@@ -153,20 +153,20 @@
     <ProjectGuid>{FBF775F5-DAB4-4BC1-97A9-D36301073438}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TensorRT</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
@@ -174,14 +174,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.3.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -199,16 +199,17 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda10.1/include;./lean/cudnn8.2.2.26;./lean/opencv3.4.6/include;./lean/TensorRT-8.0.1.6/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>./lean/TensorRT-8.0.1.6/lib;./lean/opencv3.4.6/lib;./lean/cudnn8.2.2.26;./lean/protobuf3.11.4/lib;./lean/cuda10.1/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/include;C:/Users/sia8/zkcc/cudnn-11.2;C:/Users/sia8/zkcc/opencv4.5.4/install/include;C:/Users/sia8/zkcc/TensorRT-7.2.3.4/include;C:/Users/sia8/zkcc/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:/Users/sia8/zkcc/TensorRT-7.2.3.4/lib;C:/Users/sia8/zkcc/opencv4.5.4/install/x64/vc16/lib;C:/Users/sia8/zkcc/cudnn-11.2/cuda;C:/Users/sia8/zkcc/protobuf3.11.4/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>$(ProjectName)d</TargetName>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda10.1/include;./lean/cudnn8.2.2.26;./lean/opencv3.4.6/include;./lean/TensorRT-8.0.1.6/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>./lean/TensorRT-8.0.1.6/lib;./lean/opencv3.4.6/lib;./lean/cudnn8.2.2.26;./lean/protobuf3.11.4/lib;./lean/cuda10.1/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/include;C:/Users/sia8/zkcc/cudnn-11.2;C:/Users/sia8/zkcc/opencv4.5.4/install/include;C:/Users/sia8/zkcc/TensorRT-7.2.3.4/include;C:/Users/sia8/zkcc/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:/Users/sia8/zkcc/TensorRT-7.2.3.4/lib;C:/Users/sia8/zkcc/opencv4.5.4/install/x64/vc16/lib;C:/Users/sia8/zkcc/cudnn-11.2/cuda;C:/Users/sia8/zkcc/protobuf3.11.4/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -236,14 +237,17 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world454d.lib</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
+      <IgnoreSpecificDefaultLibraries>opencv_world346d.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <CudaCompile>
       <GPUDebugInfo>false</GPUDebugInfo>
       <CodeGeneration>compute_61,sm_61</CodeGeneration>
       <Defines>ONNX_ML</Defines>
+      <Include>
+      </Include>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -300,12 +304,12 @@
       <OutputFile>python/pytrt/$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <CudaCompile>
-      <CodeGeneration>compute_61,sm_61</CodeGeneration>
+      <CodeGeneration>compute_86,sm_86</CodeGeneration>
       <Defines>ONNX_ML</Defines>
     </CudaCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.3.targets" />
   </ImportGroup>
 </Project>
