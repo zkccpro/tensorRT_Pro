@@ -5,36 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="src\application">
-      <UniqueIdentifier>{842bdd13-582d-4962-b385-24780240f89c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_yolo">
-      <UniqueIdentifier>{8f41e498-5f9a-4b39-ae39-c7408b6a9f15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\common">
-      <UniqueIdentifier>{99055b3c-0114-45c5-8f7a-723af75d0f32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\tools">
-      <UniqueIdentifier>{7d612adb-ba27-48b2-a6e3-a5ff1ee2b1c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_alphapose">
-      <UniqueIdentifier>{8e343da5-b289-4115-b074-d3d4c1960fe9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_arcface">
-      <UniqueIdentifier>{10978e2d-eba1-4409-b5b2-a60f04dbf70d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_retinaface">
-      <UniqueIdentifier>{f052bbd1-2a36-4db7-b740-6af8fa3e5984}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_scrfd">
-      <UniqueIdentifier>{b9e7b3eb-1db1-4bbf-8951-19e0a830cace}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_fall_gcn">
-      <UniqueIdentifier>{c14d8336-aa10-4ae7-b4ef-ca5f4ee0b54e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_high_performance">
-      <UniqueIdentifier>{464a5f02-d2c6-4095-8d04-ab378a56af09}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\tensorRT">
       <UniqueIdentifier>{79d3d8aa-dc41-40ef-914d-899ede7a4ff3}</UniqueIdentifier>
     </Filter>
@@ -58,27 +28,6 @@
     </Filter>
     <Filter Include="src\tensorRT\onnxplugin\plugins">
       <UniqueIdentifier>{519cfa77-e813-477c-95d5-579dee1dbe29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_python">
-      <UniqueIdentifier>{7caf9268-e35e-4d40-afef-a05f2ccfa87f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_yolo_fast">
-      <UniqueIdentifier>{64177dec-ce04-419b-aeed-30408faacaf3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_centernet">
-      <UniqueIdentifier>{b5548dbf-40be-4814-86dd-fce5fea6da46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_dbface">
-      <UniqueIdentifier>{992f9eed-cbae-47ef-ab11-f0e7c606e965}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\direct">
-      <UniqueIdentifier>{d8f597f5-d805-44d4-b592-e457cd579d67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_yolo_gpuptr">
-      <UniqueIdentifier>{0e6260e7-3bb1-4110-8e4e-5b4c1b373a7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\application\app_alphapose_old">
-      <UniqueIdentifier>{b35635fa-76e2-4b8a-988b-19370ca1b03a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,155 +61,113 @@
     <ClCompile Include="src\tensorRT\onnxplugin\plugin_binary_io.cpp">
       <Filter>src\tensorRT\onnxplugin</Filter>
     </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\builtin_op_importers.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\LoopHelpers.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\ModelImporter.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\NvOnnxParser.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\onnx2trt_utils.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\OnnxAttrs.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\onnxErrorRecorder.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\RNNHelpers.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\ShapedWeights.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tensorRT\onnx_parser\ShapeTensor.cpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_yolo.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_bert.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_lesson.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\tools\auto_download.cpp">
-      <Filter>src\application\tools</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\tools\deepsort.cpp">
-      <Filter>src\application\tools</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_alphapose\alpha_pose.cpp">
-      <Filter>src\application\app_alphapose</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_alphapose.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_arcface\arcface.cpp">
-      <Filter>src\application\app_arcface</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_arcface.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_plugin.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_retinaface\retinaface.cpp">
-      <Filter>src\application\app_retinaface</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_retinaface.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_scrfd\scrfd.cpp">
-      <Filter>src\application\app_scrfd</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_scrfd.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_fall_gcn\fall_gcn.cpp">
-      <Filter>src\application\app_fall_gcn</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_fall_recognize.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_high_performance.cpp">
-      <Filter>src\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_high_performance\alpha_pose_high_perf.cpp">
-      <Filter>src\application\app_high_performance</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_high_performance\high_performance.cpp">
-      <Filter>src\application\app_high_performance</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_high_performance\yolo_high_perf.cpp">
-      <Filter>src\application\app_high_performance</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\app_python\interface.cpp">
-      <Filter>src\application\app_python</Filter>
     </ClCompile>
     <ClCompile Include="src\tensorRT\import_lib.cpp">
       <Filter>src\tensorRT</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_yolo_fast.cpp">
-      <Filter>src\application</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\groupNormPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_yolo\yolo.cpp">
-      <Filter>src\application\app_yolo</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptivePoolPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_yolo\multi_gpu.cpp">
-      <Filter>src\application\app_yolo</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSInference.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_centernet\centernet.cpp">
-      <Filter>src\application\app_centernet</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_centernet.cpp">
-      <Filter>src\application</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\kernel.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\test_warpaffine.cpp">
-      <Filter>src\application</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\nmsHelper.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\test_yolo_map.cpp">
-      <Filter>src\application</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafeFeatureReassemblePlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_yolo_fast\yolo_fast.cpp">
-      <Filter>src\application\app_yolo_fast</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deform_conv_cuda.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_dbface\dbface.cpp">
-      <Filter>src\application\app_dbface</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deformableConvPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_dbface.cpp">
-      <Filter>src\application</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\modulatedDeformableConvPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\direct\direct_mae.cpp">
-      <Filter>src\direct</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deformablePoolPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\direct\direct_classifier.cpp">
-      <Filter>src\direct</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bboxPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\direct\direct_unet.cpp">
-      <Filter>src\direct</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\gridAnchorDynamicPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\direct\direct_yolo.cpp">
-      <Filter>src\direct</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\gridSamplePlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_yolo_gpuptr.cpp">
-      <Filter>src\application</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\meshGridPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_yolo_gpuptr\yolo_gpuptr.cpp">
-      <Filter>src\application\app_yolo_gpuptr</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roiExtractorPlugin.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\app_alphapose_old\alpha_pose_old.cpp">
-      <Filter>src\application\app_alphapose_old</Filter>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roiPoolPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchBmmPlugin\torchBmmPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torchCumMaxMinPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torchCumPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torchEmbeddingPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torchGatherPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torchNMSPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torchUnfoldPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\InferPlugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\builtin_op_importers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\LoopHelpers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\ModelImporter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\NvOnnxParser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\onnx2trt_utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\OnnxAttrs.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\RNNHelpers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\ShapedWeights.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\ShapeTensor.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,120 +216,80 @@
     <ClInclude Include="src\tensorRT\onnxplugin\plugin_binary_io.hpp">
       <Filter>src\tensorRT\onnxplugin</Filter>
     </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\builtin_op_importers.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\ImporterContext.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\LoopHelpers.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\ModelImporter.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\NvOnnxParser.h">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\onnx_utils.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_common.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_runtime.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_utils.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\OnnxAttrs.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\onnxErrorRecorder.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\RNNHelpers.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\ShapedWeights.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\ShapeTensor.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\Status.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\TensorOrWeights.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\toposort.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\trt_utils.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tensorRT\onnx_parser\utils.hpp">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\common\face_detector.hpp">
-      <Filter>src\application\common</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\tools\deepsort.hpp">
-      <Filter>src\application\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_alphapose\alpha_pose.hpp">
-      <Filter>src\application\app_alphapose</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_arcface\arcface.hpp">
-      <Filter>src\application\app_arcface</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_retinaface\retinaface.hpp">
-      <Filter>src\application\app_retinaface</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_scrfd\scrfd.hpp">
-      <Filter>src\application\app_scrfd</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_fall_gcn\fall_gcn.hpp">
-      <Filter>src\application\app_fall_gcn</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_high_performance\alpha_pose_high_perf.hpp">
-      <Filter>src\application\app_high_performance</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_high_performance\high_performance.hpp">
-      <Filter>src\application\app_high_performance</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_high_performance\yolo_high_perf.hpp">
-      <Filter>src\application\app_high_performance</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\tools\pybind11.hpp">
-      <Filter>src\application\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_yolo\yolo.hpp">
-      <Filter>src\application\app_yolo</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_yolo\multi_gpu.hpp">
-      <Filter>src\application\app_yolo</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_centernet\centernet.hpp">
-      <Filter>src\application\app_centernet</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_yolo_fast\yolo_fast.hpp">
-      <Filter>src\application\app_yolo_fast</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_dbface\dbface.hpp">
-      <Filter>src\application\app_dbface</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_yolo_gpuptr\yolo_gpuptr.hpp">
-      <Filter>src\application\app_yolo_gpuptr</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\app_alphapose_old\alpha_pose_old.hpp">
-      <Filter>src\application\app_alphapose_old</Filter>
-    </ClInclude>
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\group_norm.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\groupNormPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\common_util.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\cuda_util.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\cudnn_util.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\include\plugin\amirInferPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\reduceUtils.cuh" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptive_pool.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptivePoolPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSInference.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\bboxUtils.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\cub_helper.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\kernel.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\nmsUtils.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\plugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafe_cuda.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafeFeatureReassemblePlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\amirCommon.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\common.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\layer_base.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\serialize.hpp" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deform_conv_cuda.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deformableConvPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\modulatedDeformableConvPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deformablePoolPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bbox.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bboxPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\grid_anchor_dynamic.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\gridAnchorDynamicPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\grid_sample.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\gridSamplePlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\mesh_grid.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\meshGridPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roi_extractor.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roiExtractorPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roi_pool.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roiPoolPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchBmmPlugin\torchBmmPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torch_cum_maxmin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torchCumMaxMinPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torch_cum.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torchCumPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torch_embedding.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torchEmbeddingPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torch_gather.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torchGatherPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\bboxUtils.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torch_nms.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torchNMSPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torch_unfold.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torchUnfoldPlugin.h" />
+    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool_cuda_kernel.cuh" />
+    <ClInclude Include="src\tensorRT\onnx_parser\builtin_op_importers.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\common.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\ImporterContext.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\LoopHelpers.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\ModelImporter.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\NvOnnxParser.h" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_common.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_runtime.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_utils.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\OnnxAttrs.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnx_utils.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\RNNHelpers.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\ShapedWeights.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\ShapeTensor.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\Status.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\TensorOrWeights.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\toposort.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\trt_utils.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\tensorRT\common\preprocess_kernel.cu">
@@ -431,38 +298,63 @@
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\HSwish.cu">
       <Filter>src\tensorRT\onnxplugin\plugins</Filter>
     </CudaCompile>
-    <CudaCompile Include="src\application\app_retinaface\retinaface_decode.cu">
-      <Filter>src\application\app_retinaface</Filter>
-    </CudaCompile>
-    <CudaCompile Include="src\application\app_scrfd\scrfd_decode.cu">
-      <Filter>src\application\app_scrfd</Filter>
-    </CudaCompile>
-    <CudaCompile Include="src\application\app_yolo_fast\yolov5_decode.cu">
-      <Filter>src\application\app_yolo_fast</Filter>
-    </CudaCompile>
-    <CudaCompile Include="src\application\app_yolo_fast\yolox_decode.cu">
-      <Filter>src\application\app_yolo_fast</Filter>
-    </CudaCompile>
-    <CudaCompile Include="src\application\app_yolo\yolo_decode.cu">
-      <Filter>src\application\app_yolo</Filter>
-    </CudaCompile>
-    <CudaCompile Include="src\application\app_centernet\centernet_decode.cu">
-      <Filter>src\application\app_centernet</Filter>
-    </CudaCompile>
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\DCNv2.cu">
       <Filter>src\tensorRT\onnxplugin\plugins</Filter>
     </CudaCompile>
-    <CudaCompile Include="src\application\app_dbface\dbface_decode.cu">
-      <Filter>src\application\app_dbface</Filter>
-    </CudaCompile>
-    <CudaCompile Include="src\application\app_yolo_gpuptr\yolo_gpuptr_decode.cu">
-      <Filter>src\application\app_yolo_gpuptr</Filter>
-    </CudaCompile>
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\group_norm_kernel.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\memcpyPermute.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\repeatDims.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\tensorMeanVar.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptive_pool.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\allClassNMS.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\common.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\gatherNMSOutputs.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\permuteData.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\sortScoresPerClass.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\sortScoresPerImage.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafe_cuda_kernel.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deform_conv_cuda_kernel.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bbox.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\grid_anchor_dynamic.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\grid_sample.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\mesh_grid.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roi_extractor_kernel.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roi_pool_kernel.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torch_cum_maxmin.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torch_cum.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torch_embedding.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torch_gather.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torch_nms.cu" />
+    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torch_unfold.cu" />
+    <CudaCompile Include="src\tensorRT\onnxplugin\plugins\HSigmoid.cu" />
+    <CudaCompile Include="src\tensorRT\onnxplugin\plugins\ScatterND.cu" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\tensorRT\onnx_parser\readme.md">
-      <Filter>src\tensorRT\onnx_parser</Filter>
-    </None>
     <None Include="dll_export.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\tensorRT\amirstan_plugin\src\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchBmmPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\CMakeLists.txt" />
+    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\CMakeLists.txt" />
   </ItemGroup>
 </Project>
