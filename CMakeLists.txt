@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.17)
 project(pro)
 
 option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
@@ -39,6 +39,7 @@ find_package(OpenCV)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/src/app
     # ${PROJECT_SOURCE_DIR}/src/application
     ${PROJECT_SOURCE_DIR}/src/tensorRT
     ${PROJECT_SOURCE_DIR}/src/tensorRT/common
@@ -77,13 +78,17 @@ target_link_libraries(plugin_list cuda cublas cudart cudnn)
 target_link_libraries(plugin_list protobuf pthread)
 target_link_libraries(plugin_list ${OpenCV_LIBS})
 
-add_executable(pro ${cpp_srcs})
+# add_executable(pro ${cpp_srcs}) # 直接作为工程编译
+# 编译单测
+file(GLOB cpp_tests ${PROJECT_SOURCE_DIR}/test/*.cpp)
+add_executable(pro ${cpp_srcs} ${cpp_tests}) # 编译单测
 
 # 如果提示插件找不到，请使用dlopen(xxx.so, NOW)的方式手动加载可以解决插件找不到问题
 target_link_libraries(pro nvinfer nvinfer_plugin)
 target_link_libraries(pro cuda cublas cudart cudnn)
 target_link_libraries(pro protobuf pthread plugin_list)
 target_link_libraries(pro ${OpenCV_LIBS})
+target_link_libraries(pro gtest)
 
 if("${HAS_PYTHON}" STREQUAL "ON")
     set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/example-python/pytrt)
@@ -95,3 +100,5 @@ if("${HAS_PYTHON}" STREQUAL "ON")
     target_link_libraries(pytrtc "${PythonName}")
     target_link_libraries(pro "${PythonName}")
 endif()
+
+add_subdirectory(third_party/googletest) # 编译单测
