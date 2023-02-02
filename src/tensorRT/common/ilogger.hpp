@@ -44,6 +44,14 @@ namespace iLogger{
     #define INFOW(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Warning, __VA_ARGS__)
     #define INFOE(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Error, __VA_ARGS__)
     #define INFOF(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Fatal, __VA_ARGS__)
+    
+    // 推荐用下面这组
+    #define FMT_INFOD(format, ...)  INFOD(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOV(format, ...)  INFOV(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFO(format, ...)   INFO(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOW(format, ...)  INFOW(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOE(format, ...)  INFOE(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOF(format, ...)  INFOF(iLogger::string_format(format, ##__VA_ARGS__).c_str())
 
     string date_now();
     string time_now();

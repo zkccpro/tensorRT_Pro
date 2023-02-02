@@ -51,7 +51,7 @@ namespace Detection {
         return ret;
     }
 
-    int DetectionParser::buffer2struct(std::vector<DetResult>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) {
+    int DetectionParser::buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) {
         // if buffer is on gpu: buffer.to_cpu();
         int batch_size = buffer.shape(0);
         // if batch_size != defect_nums.size(): 报错
@@ -64,7 +64,7 @@ namespace Detection {
                                         buffer.at<float>(i, j + 2), buffer.at<float>(i, j + 3), 
                                         buffer.at<float>(i, j + 4), buffer.at<float>(i, j + 5));
             }
-            result.emplace_back(bboxes);
+            result.emplace_back(std::make_shared<DetResult>(bboxes));
         }
         return 0;
     }
@@ -76,11 +76,11 @@ namespace Detection {
         auto& classes_info = output[3]->to_cpu(); // shape: batch*100
         std::vector<int> defect_nums;
         int batch_size = defects_info->shape(0);
-        INFOD(iLogger::string_format("parse batch_size: %d", batch_size).c_str());
+        FMT_INFOD("parse batch_size: %d", batch_size);
         buffer.resize(batch_size, MAX_IMAGE_BBOX * NUM_BBOX_ELEMENT).to_cpu();
         for (int i = 0; i < batch_size; ++i) { // batch
             int defect_num = defects_info->at<int>(i, 0);
-            INFOD(iLogger::string_format("parse defect_num: %d", defect_num).c_str());
+            FMT_INFOD("parse defect_num: %d", defect_num);
             defect_nums.push_back(defect_num);
             for (int j = 0; j < defect_num; ++j) { // defect
                 for (int k = 0; k < 4; ++k) { // left, top, right, bottom

@@ -49,7 +49,7 @@ namespace Detection {
     protected:
         virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
         virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
-        virtual int buffer2struct(std::vector<DetResult>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums);
+        virtual int buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums);
     };
 
     class FasterRCNNParser : public DetectionParser {

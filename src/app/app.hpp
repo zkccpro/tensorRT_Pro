@@ -22,7 +22,7 @@ namespace App {
     class OutputParser {
     public:
         // device: 0->cpu; 1->gpu
-        int parse(std::vector<std::shared_ptr<TRT::Tensor>>& output, std::vector<R>& result, int device=0) {
+        int parse(std::vector<std::shared_ptr<TRT::Tensor>>& output, std::vector<std::shared_ptr<R>>& result, int device=0) {
             TRT::Tensor buffer(TRT::DataType::Float);
             std::vector<int> defect_nums;
             if (device == 0) {
@@ -41,7 +41,7 @@ namespace App {
         virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
         virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
         // 把buffer中的内容解到Result结构体中
-        virtual int buffer2struct(std::vector<R>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) { return 0; }
+        virtual int buffer2struct(std::vector<std::shared_ptr<R>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) { return 0; }
     };
     
     // 某一任务的推理引擎，该任务以R为结果类型
@@ -54,33 +54,85 @@ namespace App {
             if (! engine_) {
                 INFOF("Engine is nullptr, please check the path of infer!");
             }
+            engine_->print();
         }
+
+        std::shared_ptr<TRT::Infer> get_infer() {return engine_;}
+
         // 输入预处理后的单张图片，同步执行：塞进input tensor -> forward -> parse output
-        R run(cv::Mat& image) {
+        std::shared_ptr<R> run(cv::Mat& image) {
             if (image.empty()) {
-                INFOF("Input image is empty, please check input image!");
+                INFOW("Input image is empty, please check input image!");
+                return nullptr;
             }
+            
             auto input = engine_->input(0);
+            float mean[] = {0, 0, 0};
+            float std[]  = {1, 1, 1};
+            input->set_norm_mat(0, image, mean, std);
+
             int num_output = engine_->num_output();
             std::vector<std::shared_ptr<TRT::Tensor>> output;
             output.reserve(num_output);
             for (int i = 0; i < num_output; ++i) {
                 output.push_back(engine_->output(i));
             }
-            
-            float mean[] = {0, 0, 0};
-            float std[]  = {1, 1, 1};
-            input->set_norm_mat(0, image, mean, std);
 
             engine_->forward();
-            INFOD(iLogger::string_format("real defect num: %d", output[0]->at<int>(0, 0)).c_str());
-            std::vector<R> ret;
+            FMT_INFOD("real defect num: %d", output[0]->at<int>(0, 0));
+
+            std::vector<std::shared_ptr<R>> ret;
             parser_->parse(output, ret);
-            // if ret.size() != 1: 报错
+            if (ret.size() != 1) {
+                FMT_INFOW("max batch size of infer(%d) is NOT equal to batch size of input tensor(%d), please check your onnx or trt model and do a MODEL COMPILE again! ", engine_->get_max_batch_size(), image.size());
+            }
             return ret[0];
         }
+
         // TODO: 推理多张图片（batch_size > 1）
-        std::vector<R> run(std::vector<cv::Mat> images) { }
+        std::vector<std::shared_ptr<R>> run(std::vector<cv::Mat>& images) {
+            int images_size = images.size();
+            int max_batch_size = engine_->get_max_batch_size();
+            // 图片数量大于引擎最大批处理数量，assert；TODO:更温和的策略
+            if (images_size > max_batch_size) {
+                FMT_INFOF("batch images(%d) > infer max_batch_size(%d), please RECOMPILE MODEL or check your input vector!", images_size, max_batch_size);
+            } else if (images_size < max_batch_size) {
+                FMT_INFOW("batch images(%d) < infer max_batch_size(%d), the performance of engine can be better!", images_size, max_batch_size);
+            }
+
+            auto input = engine_->input(0);
+            auto image_w = input->width();
+            auto image_h = input->height();
+            for (int i = 0; i < images.size(); ++i) {
+                if (images[i].empty()) {
+                    INFOW("index %d in current batch is empty!", i);
+                    images[i] = cv::Mat(image_w, image_h, CV_8UC3, cv::Scalar(0, 0, 0));
+                }
+            }
+            float mean[] = {0, 0, 0};
+            float std[]  = {1, 1, 1};
+            int n = 0;
+            for (const auto& image : images) {
+                input->set_norm_mat(n++, image, mean, std);
+            }
+
+            int num_output = engine_->num_output();
+            std::vector<std::shared_ptr<TRT::Tensor>> output;
+            output.reserve(num_output);
+            for (int i = 0; i < num_output; ++i) {
+                output.push_back(engine_->output(i));
+            }
+
+            engine_->forward();
+
+            std::vector<std::shared_ptr<R>> ret;
+            ret.reserve(max_batch_size);
+            parser_->parse(output, ret);
+            if (ret.size() != max_batch_size) {
+                INFOW("Unexpected result number!");
+            }
+            return ret;
+        }
     private:
         std::shared_ptr<TRT::Infer> engine_;
         OutputParser<R>* parser_;
