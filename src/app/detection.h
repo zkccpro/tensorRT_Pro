@@ -28,7 +28,7 @@ namespace Detection {
     public:
         DetResult() = default;
         DetResult(const std::vector<BBox>& bboxes);
-
+        
         virtual std::string format() override;
         virtual cv::Mat format(const cv::Mat& src) override;
 

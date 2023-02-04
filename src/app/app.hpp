@@ -14,6 +14,7 @@
 namespace App {
     class Result {
     public:
+        virtual ~Result() = default;
         virtual std::string format() = 0;
         virtual cv::Mat format(const cv::Mat& src) = 0;
     };
@@ -21,6 +22,7 @@ namespace App {
     template<typename R>
     class OutputParser {
     public:
+        virtual ~OutputParser() = default;
         // device: 0->cpu; 1->gpu
         int parse(std::vector<std::shared_ptr<TRT::Tensor>>& output, std::vector<std::shared_ptr<R>>& result, int device=0) {
             TRT::Tensor buffer(TRT::DataType::Float);
@@ -84,7 +86,7 @@ namespace App {
             std::vector<std::shared_ptr<R>> ret;
             parser_->parse(output, ret);
             if (ret.size() != 1) {
-                FMT_INFOW("max batch size of infer(%d) is NOT equal to batch size of input tensor(%d), please check your onnx or trt model and do a MODEL COMPILE again! ", engine_->get_max_batch_size(), image.size());
+                FMT_INFOW("max batch size of infer(%d) is NOT equal to batch size of input tensor(1), please check your onnx or trt model and do a MODEL COMPILE again! ", engine_->get_max_batch_size());
             }
             return ret[0];
         }
