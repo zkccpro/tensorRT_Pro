@@ -61,7 +61,6 @@ namespace TRT {
 
 			if(pdata == nullptr || size == 0)
 				return false;
-
 			owner_stream_ = true;
 			checkCudaRuntime(cudaStreamCreate(&stream_));
 			if(stream_ == nullptr)

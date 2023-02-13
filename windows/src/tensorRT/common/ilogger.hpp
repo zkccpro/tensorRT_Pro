@@ -7,6 +7,7 @@
 #include <vector>
 #include <tuple>
 #include <time.h>
+#include <memory>
 
 
 #if defined(_WIN32)
@@ -19,6 +20,14 @@
 namespace iLogger{
 
     using namespace std;
+
+    template<typename ... Args>
+    string string_format(const string& format, Args ... args){
+        size_t size = 1 + snprintf(nullptr, 0, format.c_str(), args ...);  // Extra space for \0
+        unique_ptr<char[]> buf(new char[size]);
+        snprintf(buf.get(), size, format.c_str(), args ...);
+        return string(buf.get());
+    }
 
     enum class LogLevel : int{
         Debug   = 5,
@@ -35,6 +44,19 @@ namespace iLogger{
     #define INFOW(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Warning, __VA_ARGS__)
     #define INFOE(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Error, __VA_ARGS__)
     #define INFOF(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Fatal, __VA_ARGS__)
+    
+    // 推荐用下面这组
+    #define expand(x)                          x
+    #define prefix(...)                        0,##__VA_ARGS__
+    #define lastof10(a,b,c,d,e,f,g,h,i,j,...)  j
+    #define sub_nbarg(...)                     expand(lastof10(__VA_ARGS__,8,7,6,5,4,3,2,1,0))
+    #define nbarg(...)                         sub_nbarg(prefix(__VA_ARGS__))
+    #define FMT_INFOD(format, ...)  INFOD(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOV(format, ...)  INFOV(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFO(format, ...)   INFO(iLogger::string_format(format, nbarg(__VA_ARGS__)).c_str())
+    #define FMT_INFOW(format, ...)  INFOW(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOE(format, ...)  INFOE(iLogger::string_format(format, ##__VA_ARGS__).c_str())
+    #define FMT_INFOF(format, ...)  INFOF(iLogger::string_format(format, ##__VA_ARGS__).c_str())
 
     string date_now();
     string time_now();

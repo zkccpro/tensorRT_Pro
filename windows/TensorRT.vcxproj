@@ -15,7 +15,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\app\app.cpp" />
+    <ClCompile Include="src\app\detection.cpp" />
+    <ClCompile Include="src\app\pre_processing.cpp" />
     <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptivePoolPlugin.cpp" />
     <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSInference.cpp" />
     <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSPlugin.cpp" />
@@ -58,12 +60,20 @@
     <ClCompile Include="src\tensorRT\onnx_parser\NvOnnxParser.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\onnx2trt_utils.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\OnnxAttrs.cpp" />
+    <ClCompile Include="src\tensorRT\onnx_parser\onnxErrorRecorder.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\RNNHelpers.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\ShapedWeights.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\ShapeTensor.cpp" />
+    <ClCompile Include="test\base_test.cpp" />
+    <ClCompile Include="test\benchmark.cpp" />
+    <ClCompile Include="test\detection_app_test.cpp" />
+    <ClCompile Include="test\main.cpp" />
     <None Include="dll_export.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\app\app.hpp" />
+    <ClInclude Include="src\app\detection.h" />
+    <ClInclude Include="src\app\pre_processing.h" />
     <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\common_util.h" />
     <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\cuda_util.h" />
     <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\cudnn_util.h" />
@@ -134,7 +144,6 @@
     <ClInclude Include="src\tensorRT\onnx\onnxifi.h" />
     <ClInclude Include="src\tensorRT\onnx\onnx_pb.h" />
     <ClInclude Include="src\tensorRT\onnx_parser\builtin_op_importers.hpp" />
-    <ClInclude Include="src\tensorRT\onnx_parser\common.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\ImporterContext.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\LoopHelpers.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\ModelImporter.hpp" />
@@ -144,6 +153,7 @@
     <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_runtime.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\onnx2trt_utils.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\OnnxAttrs.hpp" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnxErrorRecorder.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\onnx_utils.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\RNNHelpers.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\ShapedWeights.hpp" />
@@ -262,17 +272,18 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3/include;./lean/cudnn8.0.4/include;./lean/opencv4.5.4/include;./lean/TensorRT7.2.3.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;src/tensorRT/amirstan_plugin/include;src/tensorRT/amirstan_plugin/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>./lean/TensorRT7.2.3.4/lib;./lean/opencv4.5.4/lib;./lean/cudnn8.0.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.2.2.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;src/tensorRT/amirstan_plugin/include;src/tensorRT/amirstan_plugin/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/app;third_party/googletest/googletest/include;third_party/googletest/googlemock/include</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.2.2.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);third_party/googletest/build/lib/Debug</LibraryPath>
     <TargetName>$(ProjectName)d</TargetName>
     <ExcludePath>$(ExcludePath)</ExcludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3/include;./lean/cudnn8.0.4;./lean/opencv4.5.4/include;./lean/TensorRT7.2.3.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/tensorRT/amirstan_plugin/include;./src/tensorRT/amirstan_plugin/src/plugin/common</IncludePath>
-    <LibraryPath>./lean/TensorRT7.2.3.4/lib;./lean/opencv4.5.4/lib;./lean/cudnn8.0.4;./lean/protobuf3.11.4/lib;./lean/cuda11.3/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.2.2.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/tensorRT/amirstan_plugin/include;./src/tensorRT/amirstan_plugin/src/plugin/common;third_party/googletest/googletest/include;third_party/googletest/googlemock/include;./src/app</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.2.2.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
   </PropertyGroup>
@@ -280,8 +291,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3/include;./lean/cudnn8.0.4/include;./lean/opencv4.5.4/include;./lean/TensorRT7.2.3.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);src/tensorRT/amirstan_plugin/src/plugin/common;src/tensorRT/amirstan_plugin/include</IncludePath>
-    <LibraryPath>./lean/TensorRT7.2.3.4/lib;./lean/opencv4.5.4/lib;./lean/cudnn8.0.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3/include;./lean/cudnn8.0.4/include;./lean/opencv4.5.4/include;./lean/TensorRT8.2.2.1/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);src/tensorRT/amirstan_plugin/src/plugin/common;src/tensorRT/amirstan_plugin/include</IncludePath>
+    <LibraryPath>./lean/TensorRT8.2.2.1/lib;./lean/opencv4.5.4/lib;./lean/cudnn8.0.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>libpytrtc</TargetName>
     <TargetExt>.pyd</TargetExt>
   </PropertyGroup>
@@ -299,15 +310,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <LanguageStandard>stdcpp14</LanguageStandard>
       <AdditionalIncludeDirectories>./lean/cuda11.3/include</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world454d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world454d.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <IgnoreSpecificDefaultLibraries>opencv_world346d.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>./lean/cuda11.3/lib/x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>third_party/googletest/build/lib/Debug</AdditionalLibraryDirectories>
     </Link>
     <CudaCompile>
       <GPUDebugInfo>false</GPUDebugInfo>
@@ -329,22 +341,29 @@
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp14</LanguageStandard>
-      <AdditionalIncludeDirectories>./lean/cuda11.3/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world454.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world454.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>./lean/cuda11.3/lib/x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>third_party/googletest/build/lib/Release;</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>opencv_world346.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <CudaCompile>
-      <CodeGeneration>compute_61,sm_61</CodeGeneration>
+      <CodeGeneration>compute_86,sm_86</CodeGeneration>
       <Defines>ONNX_ML</Defines>
+      <TargetMachinePlatform>32</TargetMachinePlatform>
+      <CudaRuntime>Static</CudaRuntime>
+      <AdditionalOptions>-gencode=arch=compute_86,code=sm_86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalCompilerOptions>
+      </AdditionalCompilerOptions>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'">

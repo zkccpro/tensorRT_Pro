@@ -61,9 +61,6 @@
     <ClCompile Include="src\tensorRT\onnxplugin\plugin_binary_io.cpp">
       <Filter>src\tensorRT\onnxplugin</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\tensorRT\import_lib.cpp">
       <Filter>src\tensorRT</Filter>
     </ClCompile>
@@ -169,6 +166,30 @@
     <ClCompile Include="src\tensorRT\onnx_parser\ShapeTensor.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="test\base_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test\benchmark.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test\detection_app_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\app.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\detection.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\pre_processing.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tensorRT\onnx_parser\onnxErrorRecorder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\tensorRT\builder\trt_builder.hpp">
@@ -271,7 +292,6 @@
     <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torchUnfoldPlugin.h" />
     <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool_cuda_kernel.cuh" />
     <ClInclude Include="src\tensorRT\onnx_parser\builtin_op_importers.hpp" />
-    <ClInclude Include="src\tensorRT\onnx_parser\common.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\ImporterContext.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\LoopHelpers.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\ModelImporter.hpp" />
@@ -290,6 +310,10 @@
     <ClInclude Include="src\tensorRT\onnx_parser\toposort.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\trt_utils.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\utils.hpp" />
+    <ClInclude Include="src\app\app.hpp" />
+    <ClInclude Include="src\app\detection.h" />
+    <ClInclude Include="src\app\pre_processing.h" />
+    <ClInclude Include="src\tensorRT\onnx_parser\onnxErrorRecorder.hpp" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\tensorRT\common\preprocess_kernel.cu">

@@ -8,7 +8,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>workspace</LocalDebuggerWorkingDirectory>
-    <LocalDebuggerEnvironment>PATH=$(projectDir)lean/cuda11.3/bin;$(projectDir)lean/opencv4.5.4/bin;$(projectDir)lean/cudnn8.0.4/bin;$(projectDir)lean/TensorRT7.2.3.4/lib</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>PATH=$(projectDir)lean/cuda11.3-trt8.2.2.1/bin;$(projectDir)lean/opencv4.5.4/bin;</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerMergeEnvironment>true</LocalDebuggerMergeEnvironment>
   </PropertyGroup>

@@ -3,7 +3,7 @@ project(pro)
 
 option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/workspace)
 
 # 如果要支持python则设置python路径
@@ -19,7 +19,9 @@ set(OpenCV_DIR   "/env/opencv-4.5.4/build")
 
 set(CUDA_TOOLKIT_ROOT_DIR     "/usr/local/cuda-11.1")
 set(CUDNN_DIR    "/usr/local/cudnn8.0.4")
-set(TENSORRT_DIR "/env/TensorRT-7.2.3.4")
+# set(TENSORRT_DIR "/env/TensorRT-7.2.3.4")
+set(TENSORRT_DIR "/env/TensorRT-8.2.2.1")
+
 
 # set(CUDA_TOOLKIT_ROOT_DIR     "/data/sxai/lean/cuda-10.2")
 # set(CUDNN_DIR    "/data/sxai/lean/cudnn7.6.5.32-cuda10.2")
