@@ -1,34 +1,19 @@
 /*
- * Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #include "ShapeTensor.hpp"
 #include "TensorOrWeights.hpp"
 #include "onnx2trt_utils.hpp"
 #include <algorithm>
-#include <cassert>
 #include <functional>
 
 namespace onnx2trt
 {
+
+//! If true, tolerate bug where scalar constant of type FLOAT is missing its value,
+//! and a shape tensor is expected.
+static const bool gTolerateTRT_12408 = true;
 
 ShapeTensor::ShapeTensor(int rank_, std::vector<int64_t>&& values_)
     : mDepth(0)
@@ -41,7 +26,7 @@ ShapeTensor::ShapeTensor(int rank_, std::vector<int64_t>&& values_)
     assert(rank_ > 0 || mValues.size() == 1);
 }
 
-ShapeTensor::ShapeTensor(TensorOrWeights& t)
+ShapeTensor::ShapeTensor(IImporterContext* ctx, TensorOrWeights& t)
     : mDepth(0)
 {
     if (t.is_tensor())
@@ -51,11 +36,24 @@ ShapeTensor::ShapeTensor(TensorOrWeights& t)
     else
     {
         const nvinfer1::Dims d = t.shape();
+         const auto& weights = t.weights();
+        if (gTolerateTRT_12408 && weights.type == ::onnx::TensorProto::FLOAT && d.nbDims == 0 && weights.count() == 0)
+        {
+            LOG_WARNING("Scalar constant of type FLOAT with no value encountered where ONNX specification requires tensor describing a shape. Assuming it's an INT64 empty vector.");
+            mRank = 1;
+            mSize = 0;
+            mAllValuesKnown = true;
+            return;
+        }
         assert(0 <= d.nbDims);
         assert(d.nbDims <= 1 && "shape tensor must be 0D or 1D");
         mRank = d.nbDims;
         mSize = d.nbDims == 0 ? 1 : d.d[0];
-        weightsToVector(t.weights(), &mValues);
+        auto status = weightsToVector(weights, &mValues);
+        if (status.code() != ErrorCode::kSUCCESS)
+        {
+            throw std::runtime_error("constant " + t.getName() + " is not a valid shape tensor");
+        }
         mAllValuesKnown = true;
     }
 }
@@ -160,7 +158,7 @@ nvinfer1::ITensor& ShapeTensor::tensor(IImporterContext* ctx) const
         if (allValuesKnown())
         {
             // Create constant
-            const nvinfer1::Dims dims{rank(), {size()}, {}};
+            const nvinfer1::Dims dims{rank(), {size()}};
             const nvinfer1::Weights w{nvinfer1::DataType::kINT32, convertINT64(mValues.data(), dims, ctx), size()};
             mTensor = ctx->network()->addConstant(dims, w)->getOutput(0);
             mDepth = 0;
@@ -346,11 +344,8 @@ ShapeTensor shapeOf(TensorOrWeights& t)
     {
         return shapeOf(t.tensor());
     }
-    else
-    {
-        const nvinfer1::Dims& d = t.weights().shape;
-        return ShapeTensor(1, std::vector<int64_t>(d.d, d.d + d.nbDims));
-    }
+    const nvinfer1::Dims& d = t.weights().shape;
+    return ShapeTensor(1, std::vector<int64_t>(d.d, d.d + d.nbDims));
 }
 
 ShapeTensor shapeOf(const ShapeTensor& t)
@@ -360,15 +355,12 @@ ShapeTensor shapeOf(const ShapeTensor& t)
     {
         return ShapeTensor(*t.mTensor, t.mDepth + 1);
     }
-    else
-    {
-        assert(t.rankKnown());
-        assert(t.sizeKnown());
-        // ShapeTensor is either a scalar or vector.
-        // shape of a scalar is an empty tensor.
-        // shape of a vector is a one-element tensor containing the length of the vector.
-        return t.rank() == 0 ? ShapeTensor(0, {}) : ShapeTensor(1, {t.size()});
-    }
+    assert(t.rankKnown());
+    assert(t.sizeKnown());
+    // ShapeTensor is either a scalar or vector.
+    // shape of a scalar is an empty tensor.
+    // shape of a vector is a one-element tensor containing the length of the vector.
+    return t.rank() == 0 ? ShapeTensor(0, {}) : ShapeTensor(1, {t.size()});
 }
 
 ShapeTensor convertTo1D(IImporterContext* ctx, const ShapeTensor& tensor)
@@ -382,23 +374,12 @@ ShapeTensor convertTo1D(IImporterContext* ctx, const ShapeTensor& tensor)
     return ShapeTensor(*addShuffle(ctx, tensor.tensor(ctx), shapeVector(1))->getOutput(0));
 }
 
-//! If all values of x are known, return Dims with those values.
+//! If all values of x are known, return Dims with those values,
+//! but throw exception if any value is outside specified bounds.
 //! Otherwise return Dims with zeros.
-static nvinfer1::Dims toDims(const ShapeTensor& x)
-{
-    nvinfer1::Dims d{-1, {}, {}};
-    if (x.sizeKnown())
-    {
-        d.nbDims = x.size();
-        if (x.allValuesKnown())
-        {
-            assert(x.size() <= nvinfer1::Dims::MAX_DIMS);
-            std::copy(x.begin(), x.end(), d.d);
-        }
-    }
-    return d;
-}
-
+//!
+//! The string that should describe the context of the dimensions,
+//! e.g. "reshape" or "fill output".
 static nvinfer1::Dims toDims(const ShapeTensor& x, const char* what, int32_t minAllowed, int32_t maxAllowed)
 {
     nvinfer1::Dims d{-1, {}};
@@ -459,23 +440,23 @@ nvinfer1::IShuffleLayer* addShuffle(
     nvinfer1::IShuffleLayer* shuffle = ctx->network()->addShuffle(data);
     if (reshapeDims.allValuesKnown())
     {
-        shuffle->setReshapeDimensions(toDims(reshapeDims));
+        shuffle->setReshapeDimensions(toDims(reshapeDims, "reshape", -1, std::numeric_limits<int32_t>::max()));
     }
     else
     {
         shuffle->setInput(1, reshapeDims.tensor(ctx));
     }
-
-    #if NV_TENSORRT_VERSION >= 7200
     shuffle->setZeroIsPlaceholder(zeroIsPlaceholder);
-    #endif
     return shuffle;
 }
 
 nvinfer1::ISliceLayer* addSlice(IImporterContext* ctx, nvinfer1::ITensor& data, const ShapeTensor& starts,
     const ShapeTensor& sizes, const ShapeTensor& strides)
 {
-    nvinfer1::ISliceLayer* slice = ctx->network()->addSlice(data, toDims(starts), toDims(sizes), toDims(strides));
+    constexpr int32_t minDim = std::numeric_limits<int32_t>::min();
+    constexpr int32_t maxDim = std::numeric_limits<int32_t>::max();
+    nvinfer1::ISliceLayer* slice = ctx->network()->addSlice(data, toDims(starts, "slice start", 0, maxDim),
+        toDims(sizes, "slice size", 0, maxDim), toDims(strides, "slide strides", minDim, maxDim));
     setShapeInputIfDynamic(ctx, slice, 1, starts);
     setShapeInputIfDynamic(ctx, slice, 2, sizes);
     setShapeInputIfDynamic(ctx, slice, 3, strides);
@@ -484,7 +465,8 @@ nvinfer1::ISliceLayer* addSlice(IImporterContext* ctx, nvinfer1::ITensor& data, 
 
 nvinfer1::IFillLayer* addFill(IImporterContext* ctx, const ShapeTensor& shape, nvinfer1::FillOperation op)
 {
-    nvinfer1::IFillLayer* fill = ctx->network()->addFill(toDims(shape), op);
+    nvinfer1::IFillLayer* fill
+        = ctx->network()->addFill(toDims(shape, "fill output", 0, std::numeric_limits<int32_t>::max()), op);
     setShapeInputIfDynamic(ctx, fill, 0, shape);
     return fill;
 }

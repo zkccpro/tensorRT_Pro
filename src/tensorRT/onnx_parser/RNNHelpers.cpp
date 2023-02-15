@@ -1,3 +1,7 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "RNNHelpers.hpp"
 #include "LoopHelpers.hpp"
 #include "onnx2trt_utils.hpp"
