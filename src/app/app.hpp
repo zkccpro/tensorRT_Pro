@@ -5,9 +5,11 @@
 
 #include <string>
 #include <vector>
+#include <array>
+#include <memory>
+
 #include <plugin/amirInferPlugin.h>
 #include <infer/trt_infer.hpp>
-#include <memory>
 #include <opencv2/opencv.hpp>
 #include <ilogger.hpp>
 
@@ -59,19 +61,17 @@ namespace App {
             engine_->print();
         }
 
-        std::shared_ptr<TRT::Infer> get_infer() {return engine_;}
+        std::shared_ptr<TRT::Infer> mutable_infer() {return engine_;}
 
         // 输入预处理后的单张图片，同步执行：塞进input tensor -> forward -> parse output
-        std::shared_ptr<R> run(cv::Mat& image) {
+        std::shared_ptr<R> run(cv::Mat& image, std::array<float, 3>& mean, std::array<float, 3>& std) {
             if (image.empty()) {
                 INFOW("Input image is empty, please check input image!");
                 return nullptr;
             }
             
             auto input = engine_->input(0);
-            float mean[] = {0, 0, 0};
-            float std[]  = {1, 1, 1};
-            input->set_norm_mat(0, image, mean, std);
+            input->set_norm_mat(0, image, mean.data(), std.data());
 
             int num_output = engine_->num_output();
             std::vector<std::shared_ptr<TRT::Tensor>> output;
@@ -92,7 +92,7 @@ namespace App {
         }
 
         // TODO: 推理多张图片（batch_size > 1）
-        std::vector<std::shared_ptr<R>> run(std::vector<cv::Mat>& images) {
+        std::vector<std::shared_ptr<R>> run(std::vector<cv::Mat>& images, std::array<float, 3>& mean, std::array<float, 3>& std) {
             int images_size = images.size();
             int max_batch_size = engine_->get_max_batch_size();
             // 图片数量大于引擎最大批处理数量，assert；TODO:更温和的策略
@@ -111,11 +111,9 @@ namespace App {
                     images[i] = cv::Mat(image_w, image_h, CV_8UC3, cv::Scalar(0, 0, 0));
                 }
             }
-            float mean[] = {0, 0, 0};
-            float std[]  = {1, 1, 1};
             int n = 0;
             for (const auto& image : images) {
-                input->set_norm_mat(n++, image, mean, std);
+                input->set_norm_mat(n++, image, mean.data(), std.data());
             }
 
             int num_output = engine_->num_output();

@@ -7,7 +7,6 @@
 
 namespace Detection {
 
-    const float CONFIDENCE_THRESHOLD = 0;
     const int NUM_BBOX_ELEMENT = 6;
     const int MAX_IMAGE_BBOX = 100;
 
@@ -16,10 +15,11 @@ namespace Detection {
         BBox() = default;
         BBox(float left, float top, float right, float bottom, 
              float confidence, float label):
-        left(left), top(top), right(right), bottom(bottom), 
-        confidence(confidence), label(label) { }
+        left(left), top(top), right(right), bottom(bottom),
+        confidence(confidence), label(label),
+        area((right - left) * (bottom - top)) { }
 
-        float left, top, right, bottom, confidence, label;
+        float left, top, right, bottom, confidence, label, area;
     };
     
     // 检测任务的结果
@@ -30,18 +30,21 @@ namespace Detection {
         DetResult(const std::vector<BBox>& bboxes);
         
         virtual std::string format() override;
-        virtual cv::Mat format(const cv::Mat& src) override;
+        virtual cv::Mat     format(const cv::Mat& src) override;
 
-        std::vector<BBox> defects();
-        std::vector<BBox> objects() { return defects(); }
-        std::vector<BBox> bboxes() { return bboxes_; }
+        std::vector<BBox>&  mutable_defects()         { return bboxes_; }
+        std::vector<BBox>&  mutable_objects()         { return bboxes_; }
+        std::vector<BBox>&  mutable_bboxes()          { return bboxes_; }
+
+        std::vector<BBox>   immutable_defects() const { return bboxes_; }
+        std::vector<BBox>   immutable_objects() const { return bboxes_; }
+        std::vector<BBox>   immutable_bboxes()  const { return bboxes_; }
 
         uint32_t defect_num() { return bboxes_.size(); }
-        bool ok() { return defect_num_ == 0; } // 没有缺陷，良品
-        bool negative() { return defect_num_ == 0; } // 没有目标
+        bool     ok()         { return defect_num() == 0; } // 没有缺陷，良品
+        bool     negative()   { return defect_num() == 0; } // 没有目标
     private:
         std::vector<BBox> bboxes_;
-        uint32_t defect_num_;
     };
     
     /// 各个算法的 output parser

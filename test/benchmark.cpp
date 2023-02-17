@@ -14,13 +14,13 @@ protected:
 
         // trt7_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=1_trt7.trt", Detection::faster_rcnn_parser);
         // multibatch_trt7_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=8_trt7.trt", Detection::faster_rcnn_parser);
-        // for (int i = 0; i < multibatch_trt7_engine->get_infer()->get_max_batch_size(); ++i) {
+        // for (int i = 0; i < multibatch_trt7_engine->mutable_infer()->get_max_batch_size(); ++i) {
         //     images_NG->push_back(*image_NG);
         // }
 
         trt8_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=1_trt8.trt", Detection::faster_rcnn_parser);
         multibatch_trt8_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=8_trt8.trt", Detection::faster_rcnn_parser);
-        for (int i = 0; i < multibatch_trt8_engine->get_infer()->get_max_batch_size(); ++i) {
+        for (int i = 0; i < multibatch_trt8_engine->mutable_infer()->get_max_batch_size(); ++i) {
             images_NG->push_back(*image_NG);
         }
     }
@@ -34,6 +34,9 @@ protected:
     std::shared_ptr<cv::Mat> image_NG;
 
     std::shared_ptr<std::vector<cv::Mat>> images_NG;
+
+    std::array<float, 3> mean{123.675f, 116.28f, 103.53f};
+    std::array<float, 3> std{58.395f, 57.12f, 57.375f};
 };
 
 // // trt7单batch测试
@@ -44,7 +47,7 @@ protected:
 //     ASSERT_NE(trt7_engine, nullptr);
 
 //     for (int i = 0; i < 500; ++i) {
-//         auto result = trt7_engine->run(*image_NG);
+//         auto result = trt7_engine->run(*image_NG, mean, std);
 //         result->format();
 //     }
 // }
@@ -57,7 +60,7 @@ protected:
 //     ASSERT_NE(multibatch_trt7_engine, nullptr);
 
 //     for (int i = 0; i < 500; ++i) {
-//         auto result = multibatch_trt7_engine->run(*images_NG);
+//         auto result = multibatch_trt7_engine->run(*images_NG, mean, std);
 //         for (auto& ret : result) {
 //             ret->format();
 //         }
@@ -72,7 +75,7 @@ TEST_F(BenchMark, TRT8SingleImage) {
     ASSERT_NE(trt8_engine, nullptr);
 
     for (int i = 0; i < 500; ++i) {
-        auto result = trt8_engine->run(*image_NG);
+        auto result = trt8_engine->run(*image_NG, mean, std);
         result->format();
     }
 }
@@ -85,7 +88,7 @@ TEST_F(BenchMark, TRT8MultiImages) {
     ASSERT_NE(multibatch_trt8_engine, nullptr);
 
     for (int i = 0; i < 500; ++i) {
-        auto result = multibatch_trt8_engine->run(*images_NG);
+        auto result = multibatch_trt8_engine->run(*images_NG, mean, std);
         for (auto& ret : result) {
             ret->format();
         }

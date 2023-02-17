@@ -2,23 +2,16 @@
 #include "detection.h"
 
 namespace Detection {
-    DetResult::DetResult(const std::vector<BBox>& bboxes) : bboxes_(bboxes) {
-        for (const auto& bbox : bboxes) {
-            if (bbox.confidence >= CONFIDENCE_THRESHOLD) {
-                defect_num_++;
-            }
-        }
-    }
+    DetResult::DetResult(const std::vector<BBox>& bboxes) : bboxes_(bboxes) { }
 
     std::string DetResult::format() {
         std::string ret_str = "result is:\n" ;
-        auto defs = defects();
-        if (defs.size() == 0) {
+        if (bboxes_.size() == 0) {
             ret_str.append("empty.");
         }
-        for (int i = 0; i < defs.size(); ++i) {
+        for (int i = 0; i < defect_num(); ++i) {
             ret_str.append(iLogger::string_format("obj%d: left=%f, top=%f, right=%f, bottom=%f, confidence=%f, label=%f\n",
-                                        i + 1, defs[i].left, defs[i].top, defs[i].right, defs[i].bottom, defs[i].confidence, defs[i].label));
+                                        i + 1, bboxes_[i].left, bboxes_[i].top, bboxes_[i].right, bboxes_[i].bottom, bboxes_[i].confidence, bboxes_[i].label));
         }
         return ret_str;
     }
@@ -28,7 +21,7 @@ namespace Detection {
             INFOW("Format input image is empty, may cause core when you try to save the image!");
         }
         cv::Mat dst { src };
-        for (const auto& bbox : defects()) {
+        for (const auto& bbox : bboxes_) {
             if ((bbox.right - bbox.left) != 0 &&
                 (bbox.bottom - bbox.top) != 0) {
                 auto rect = cv::Rect(bbox.left, bbox.top, bbox.right - bbox.left, bbox.bottom - bbox.top);
@@ -38,17 +31,6 @@ namespace Detection {
             }
         }
         return dst;
-    }
-
-    std::vector<BBox> DetResult::defects() {
-        std::vector<BBox> ret;
-        ret.reserve(defect_num_);
-        for (const auto& bbox : bboxes_) {
-            if (bbox.confidence >= CONFIDENCE_THRESHOLD) {
-                ret.push_back(bbox);
-            }
-        }
-        return ret;
     }
 
     int DetectionParser::buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) {
