@@ -126,7 +126,7 @@ namespace App {
             engine_->forward();
 
             std::vector<std::shared_ptr<R>> ret;
-            ret.reserve(max_batch_size);
+            ret.reserve(images_size);
             parser_->parse(output, ret);
             if (ret.size() != max_batch_size) {
                 INFOW("Unexpected result number!");

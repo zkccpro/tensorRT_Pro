@@ -19,7 +19,8 @@ public:
 		if (severity == Severity::kINTERNAL_ERROR) {
 			INFOE("NVInfer INTERNAL_ERROR: %s", msg);
 			abort();
-		}else if (severity == Severity::kERROR) {
+		}
+		else if (severity == Severity::kERROR) {
 			INFOE("NVInfer: %s", msg);
 		}
 		else  if (severity == Severity::kWARNING) {
@@ -47,10 +48,10 @@ namespace TRT {
 	public:
 		virtual ~EngineContext() { destroy(); }
 
-		void set_stream(CUStream stream){
+		void set_stream(CUStream stream) {
 
-			if(owner_stream_){
-				if (stream_) {cudaStreamDestroy(stream_);}
+			if (owner_stream_) {
+				if (stream_) { cudaStreamDestroy(stream_); }
 				owner_stream_ = false;
 			}
 			stream_ = stream;
@@ -59,17 +60,17 @@ namespace TRT {
 		bool build_model(const void* pdata, size_t size) {
 			destroy();
 
-			if(pdata == nullptr || size == 0)
+			if (pdata == nullptr || size == 0)
 				return false;
 			owner_stream_ = true;
 			checkCudaRuntime(cudaStreamCreate(&stream_));
-			if(stream_ == nullptr)
+			if (stream_ == nullptr)
 				return false;
 
 			runtime_ = shared_ptr<IRuntime>(createInferRuntime(gLogger), destroy_nvidia_pointer<IRuntime>);
 			if (runtime_ == nullptr)
 				return false;
-
+			initLibNvInferPlugins(&gLogger, "");
 			engine_ = shared_ptr<ICudaEngine>(runtime_->deserializeCudaEngine(pdata, size, nullptr), destroy_nvidia_pointer<ICudaEngine>);
 			if (engine_ == nullptr)
 				return false;
@@ -85,8 +86,8 @@ namespace TRT {
 			engine_.reset();
 			runtime_.reset();
 
-			if(owner_stream_){
-				if (stream_) {cudaStreamDestroy(stream_);}
+			if (owner_stream_) {
+				if (stream_) { cudaStreamDestroy(stream_); }
 			}
 			stream_ = nullptr;
 		}
@@ -120,7 +121,7 @@ namespace TRT {
 		virtual std::shared_ptr<Tensor> tensor(const std::string& name) override;
 		virtual bool is_output_name(const std::string& name) override;
 		virtual bool is_input_name(const std::string& name) override;
-		virtual void set_input (int index, std::shared_ptr<Tensor> tensor) override;
+		virtual void set_input(int index, std::shared_ptr<Tensor> tensor) override;
 		virtual void set_output(int index, std::shared_ptr<Tensor> tensor) override;
 		virtual std::shared_ptr<std::vector<uint8_t>> serial_engine() override;
 
@@ -146,10 +147,11 @@ namespace TRT {
 		std::vector<void*> bindingsPtr_;
 		std::shared_ptr<MixMemory> workspace_;
 		int device_ = 0;
+		int max_batch_size_ = 0;
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////
-	InferImpl::~InferImpl(){
+	InferImpl::~InferImpl() {
 		destroy();
 	}
 
@@ -167,8 +169,8 @@ namespace TRT {
 		checkCudaRuntime(cudaSetDevice(old_device));
 	}
 
-	void InferImpl::print(){
-		if(!context_){
+	void InferImpl::print() {
+		if (!context_) {
 			INFOW("Infer print, nullptr.");
 			return;
 		}
@@ -177,23 +179,23 @@ namespace TRT {
 		INFO("\tBase device: %s", CUDATools::device_description().c_str());
 		INFO("\tMax Batch Size: %d", this->get_max_batch_size());
 		INFO("\tInputs: %d", inputs_.size());
-		for(int i = 0; i < inputs_.size(); ++i){
+		for (int i = 0; i < inputs_.size(); ++i) {
 			auto& tensor = inputs_[i];
 			auto& name = inputs_name_[i];
 			INFO("\t\t%d.%s : shape {%s}, %s", i, name.c_str(), tensor->shape_string(), data_type_string(tensor->type()));
 		}
 
 		INFO("\tOutputs: %d", outputs_.size());
-		for(int i = 0; i < outputs_.size(); ++i){
+		for (int i = 0; i < outputs_.size(); ++i) {
 			auto& tensor = outputs_[i];
 			auto& name = outputs_name_[i];
 			INFO("\t\t%d.%s : shape {%s}, %s", i, name.c_str(), tensor->shape_string(), data_type_string(tensor->type()));
-		} 
+		}
 	}
 
 	std::shared_ptr<std::vector<uint8_t>> InferImpl::serial_engine() {
 		auto memory = this->context_->engine_->serialize();
-		auto output = make_shared<std::vector<uint8_t>>((uint8_t*)memory->data(), (uint8_t*)memory->data()+memory->size());
+		auto output = make_shared<std::vector<uint8_t>>((uint8_t*)memory->data(), (uint8_t*)memory->data() + memory->size());
 		memory->destroy();
 		return output;
 	}
@@ -242,22 +244,22 @@ namespace TRT {
 		return context->context_->getEngine().getDeviceMemorySize();
 	}
 
-	static TRT::DataType convert_trt_datatype(nvinfer1::DataType dt){
-		switch(dt){
-			case nvinfer1::DataType::kFLOAT: return TRT::DataType::Float;
-			case nvinfer1::DataType::kHALF: return TRT::DataType::Float16;
-			case nvinfer1::DataType::kINT32: return TRT::DataType::Int32;
-			default:
-				INFOE("Unsupport data type %d", dt);
-				return TRT::DataType::Float;
+	static TRT::DataType convert_trt_datatype(nvinfer1::DataType dt) {
+		switch (dt) {
+		case nvinfer1::DataType::kFLOAT: return TRT::DataType::Float;
+		case nvinfer1::DataType::kHALF: return TRT::DataType::Float16;
+		case nvinfer1::DataType::kINT32: return TRT::DataType::Int32;
+		default:
+			INFOE("Unsupport data type %d", dt);
+			return TRT::DataType::Float;
 		}
 	}
 
 	void InferImpl::build_engine_input_and_outputs_mapper() {
-		
+
 		EngineContext* context = (EngineContext*)this->context_.get();
 		int nbBindings = context->engine_->getNbBindings();
-		int max_batchsize = context->engine_->getMaxBatchSize();
+		// int max_batchsize = context->engine_->getMaxBatchSize();
 
 		inputs_.clear();
 		inputs_name_.clear();
@@ -271,7 +273,14 @@ namespace TRT {
 			auto dims = context->engine_->getBindingDimensions(i);
 			auto type = context->engine_->getBindingDataType(i);
 			const char* bindingName = context->engine_->getBindingName(i);
-			dims.d[0] = max_batchsize;
+			if (dims.d[0] == -1) {
+				FMT_INFOW("When tensorRT_Pro using in TensorRT(8.1 < version < 8.4), get_max_batch_size() MAY be wrong!!! Recommend you to update your TensorRT >= 8.4!");
+				max_batch_size_ = context->engine_->getMaxBatchSize();
+				dims.d[0] = max_batch_size_;
+			}
+			else if (max_batch_size_ == 0) {
+				max_batch_size_ = dims.d[0];
+			}
 			auto newTensor = make_shared<Tensor>(dims.nbDims, dims.d, convert_trt_datatype(type));
 			newTensor->set_stream(this->context_->stream_);
 			newTensor->set_workspace(this->workspace_);
@@ -293,10 +302,10 @@ namespace TRT {
 		bindingsPtr_.resize(orderdBlobs_.size());
 	}
 
-	void InferImpl::set_stream(CUStream stream){
+	void InferImpl::set_stream(CUStream stream) {
 		this->context_->set_stream(stream);
 
-		for(auto& t : orderdBlobs_)
+		for (auto& t : orderdBlobs_)
 			t->set_stream(stream);
 	}
 
@@ -312,11 +321,11 @@ namespace TRT {
 		checkCudaRuntime(cudaStreamSynchronize(context_->stream_));
 	}
 
-	bool InferImpl::is_output_name(const std::string& name){
+	bool InferImpl::is_output_name(const std::string& name) {
 		return std::find(outputs_name_.begin(), outputs_name_.end(), name) != outputs_name_.end();
 	}
 
-	bool InferImpl::is_input_name(const std::string& name){
+	bool InferImpl::is_input_name(const std::string& name) {
 		return std::find(inputs_name_.begin(), inputs_name_.end(), name) != inputs_name_.end();
 	}
 
@@ -324,11 +333,11 @@ namespace TRT {
 
 		EngineContext* context = (EngineContext*)context_.get();
 		int inputBatchSize = inputs_[0]->size(0);
-		for(int i = 0; i < context->engine_->getNbBindings(); ++i){
+		for (int i = 0; i < context->engine_->getNbBindings(); ++i) {
 			auto dims = context->engine_->getBindingDimensions(i);
 			auto type = context->engine_->getBindingDataType(i);
 			dims.d[0] = inputBatchSize;
-			if(context->engine_->bindingIsInput(i)){
+			if (context->engine_->bindingIsInput(i)) {
 				context->context_->setBindingDimensions(i, dims);
 			}
 		}
@@ -344,7 +353,7 @@ namespace TRT {
 		void** bindingsptr = bindingsPtr_.data();
 		//bool execute_result = context->context_->enqueue(inputBatchSize, bindingsptr, context->stream_, nullptr);
 		bool execute_result = context->context_->enqueueV2(bindingsptr, context->stream_, nullptr);
-		if(!execute_result){
+		if (!execute_result) {
 			auto code = cudaGetLastError();
 			INFOF("execute fail, code %d[%s], message %s", code, cudaGetErrorName(code), cudaGetErrorString(code));
 		}
@@ -366,9 +375,9 @@ namespace TRT {
 		return static_cast<int>(this->outputs_.size());
 	}
 
-	void InferImpl::set_input (int index, std::shared_ptr<Tensor> tensor){
-		
-		if(index < 0 || index >= inputs_.size()){
+	void InferImpl::set_input(int index, std::shared_ptr<Tensor> tensor) {
+
+		if (index < 0 || index >= inputs_.size()) {
 			INFOF("Input index[%d] out of range [size=%d]", index, inputs_.size());
 		}
 
@@ -377,9 +386,9 @@ namespace TRT {
 		this->orderdBlobs_[order_index] = tensor;
 	}
 
-	void InferImpl::set_output(int index, std::shared_ptr<Tensor> tensor){
+	void InferImpl::set_output(int index, std::shared_ptr<Tensor> tensor) {
 
-		if(index < 0 || index >= outputs_.size()){
+		if (index < 0 || index >= outputs_.size()) {
 			INFOF("Output index[%d] out of range [size=%d]", index, outputs_.size());
 		}
 
@@ -389,48 +398,48 @@ namespace TRT {
 	}
 
 	std::shared_ptr<Tensor> InferImpl::input(int index) {
-		if(index < 0 || index >= inputs_.size()){
+		if (index < 0 || index >= inputs_.size()) {
 			INFOF("Input index[%d] out of range [size=%d]", index, inputs_.size());
 		}
 		return this->inputs_[index];
 	}
 
-	std::string InferImpl::get_input_name(int index){
-		if(index < 0 || index >= inputs_name_.size()){
+	std::string InferImpl::get_input_name(int index) {
+		if (index < 0 || index >= inputs_name_.size()) {
 			INFOF("Input index[%d] out of range [size=%d]", index, inputs_name_.size());
 		}
 		return inputs_name_[index];
 	}
 
 	std::shared_ptr<Tensor> InferImpl::output(int index) {
-		if(index < 0 || index >= outputs_.size()){
+		if (index < 0 || index >= outputs_.size()) {
 			INFOF("Output index[%d] out of range [size=%d]", index, outputs_.size());
 		}
 		return outputs_[index];
 	}
 
-	std::string InferImpl::get_output_name(int index){
-		if(index < 0 || index >= outputs_name_.size()){
+	std::string InferImpl::get_output_name(int index) {
+		if (index < 0 || index >= outputs_name_.size()) {
 			INFOF("Output index[%d] out of range [size=%d]", index, outputs_name_.size());
 		}
 		return outputs_name_[index];
 	}
 
 	int InferImpl::get_max_batch_size() {
-		Assert(this->context_ != nullptr);
-		return this->context_->engine_->getMaxBatchSize();
+		Assert(this->context_ != nullptr && max_batch_size_ != 0);
+		return max_batch_size_;
 	}
 
 	std::shared_ptr<Tensor> InferImpl::tensor(const std::string& name) {
 
 		auto node = this->blobsNameMapper_.find(name);
-		if(node == this->blobsNameMapper_.end()){
+		if (node == this->blobsNameMapper_.end()) {
 			INFOF("Could not found the input/output node '%s', please makesure your model", name.c_str());
 		}
 		return orderdBlobs_[node->second];
 	}
 
-	std::shared_ptr<Infer> load_infer_from_memory(const void* pdata, size_t size){
+	std::shared_ptr<Infer> load_infer_from_memory(const void* pdata, size_t size) {
 
 		std::shared_ptr<InferImpl> Infer(new InferImpl());
 		if (!Infer->load_from_memory(pdata, size))
@@ -439,7 +448,7 @@ namespace TRT {
 	}
 
 	std::shared_ptr<Infer> load_infer(const string& file) {
-		
+
 		std::shared_ptr<InferImpl> Infer(new InferImpl());
 		if (!Infer->load(file))
 			Infer.reset();

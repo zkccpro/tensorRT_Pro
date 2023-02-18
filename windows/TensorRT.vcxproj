@@ -272,8 +272,8 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3-trt8.2.2.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;src/tensorRT/amirstan_plugin/include;src/tensorRT/amirstan_plugin/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/app;third_party/googletest/googletest/include;third_party/googletest/googlemock/include</IncludePath>
-    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.2.2.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);third_party/googletest/build/lib/Debug</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.4.3.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;src/tensorRT/amirstan_plugin/include;src/tensorRT/amirstan_plugin/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/app;third_party/googletest/googletest/include;third_party/googletest/googlemock/include</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.4.3.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);third_party/googletest/build/lib/Debug</LibraryPath>
     <TargetName>$(ProjectName)d</TargetName>
     <ExcludePath>$(ExcludePath)</ExcludePath>
     <SourcePath>$(SourcePath)</SourcePath>
@@ -282,8 +282,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3-trt8.2.2.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/tensorRT/amirstan_plugin/include;./src/tensorRT/amirstan_plugin/src/plugin/common;third_party/googletest/googletest/include;third_party/googletest/googlemock/include;./src/app</IncludePath>
-    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.2.2.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.4.3.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/tensorRT/amirstan_plugin/include;./src/tensorRT/amirstan_plugin/src/plugin/common;third_party/googletest/googletest/include;third_party/googletest/googlemock/include;./src/app</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.4.3.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
   </PropertyGroup>
@@ -315,7 +315,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world454d.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nvinfer_plugin.lib;opencv_world454d.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <IgnoreSpecificDefaultLibraries>opencv_world346d.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -350,7 +350,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world454.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nvinfer_plugin.lib;opencv_world454.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <AdditionalLibraryDirectories>third_party/googletest/build/lib/Release;</AdditionalLibraryDirectories>

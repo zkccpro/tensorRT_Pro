@@ -7,23 +7,21 @@ class DetAppCase : public ::testing::Test {
 protected:
     virtual void SetUp() {
         App::use_amirstan_plugin();
-        engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=1_trt8.trt", Detection::faster_rcnn_parser);
-        image_OK = std::make_shared<cv::Mat>(cv::imread("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/OK_origin.jpg"));
-        image_NG = std::make_shared<cv::Mat>(cv::imread("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/NG_origin.jpg"));
+        engine = App::create_infer<Detection::DetResult>("workspace/yolov7_640_64.trt", Detection::faster_rcnn_parser);
+        image_OK = cv::imread("workspace/OK_origin.jpg");
+        image_NG = cv::imread("workspace/NG_origin.jpg");
         
-        images_OK = std::make_shared<std::vector<cv::Mat>>();
-        images_NG = std::make_shared<std::vector<cv::Mat>>();
         for (int i = 0; i < engine->mutable_infer()->get_max_batch_size(); ++i) {
-            images_OK->push_back(*image_OK);
-            images_NG->push_back(*image_NG);
+            images_OK.push_back(image_OK);
+            images_NG.push_back(image_NG);
         }
     }
     // 记得初始化哦...
     std::shared_ptr<App::Engine<Detection::DetResult>> engine;
-    std::shared_ptr<std::vector<cv::Mat>> images_OK;
-    std::shared_ptr<std::vector<cv::Mat>> images_NG;
-    std::shared_ptr<cv::Mat> image_OK;
-    std::shared_ptr<cv::Mat> image_NG;
+    std::vector<cv::Mat> images_OK;
+    std::vector<cv::Mat> images_NG;
+    cv::Mat image_OK;
+    cv::Mat image_NG;
 
     std::array<float, 3> mean{123.675f, 116.28f, 103.53f};
     std::array<float, 3> std{58.395f, 57.12f, 57.375f};
@@ -32,21 +30,21 @@ protected:
 TEST_F(DetAppCase, RunSinglePicture) {
     ASSERT_NE(engine, nullptr);
 
-    auto result = engine->run(*image_OK, mean, std);
+    auto result = engine->run(image_OK, mean, std);
 }
 
 TEST_F(DetAppCase, RunMultiPictures) {
     ASSERT_NE(engine, nullptr);
-    engine->run(*images_NG, mean, std);
+    engine->run(images_NG, mean, std);
 }
 
 TEST_F(DetAppCase, SinglePictureCPUPreProcessing) {
     ASSERT_NE(engine, nullptr);
     
-    auto f = preprocessing::resize_keep_aspect_ratio(*image_OK, cv::Size{2000, 2000}, *image_OK);
+    auto f = preprocessing::resize_keep_aspect_ratio(image_OK, cv::Size{640, 640}, image_OK);
     FMT_INFO("%f %f", f.width, f.height);
-    FMT_INFO("%d %d", image_OK->size().width, image_OK->size().height);
-    auto result = engine->run(*image_OK, mean, std); // 当然这里会再次resize到模型指定大小的
+    FMT_INFO("%d %d", image_OK.size().width, image_OK.size().height);
+    auto result = engine->run(image_OK, mean, std); // 当然这里会再次resize到模型指定大小的
 }
 
 // TEST_F(DetAppCase, SinglePictureGPUPreProcessing) {
@@ -56,21 +54,21 @@ TEST_F(DetAppCase, SinglePictureCPUPreProcessing) {
 TEST_F(DetAppCase, FasterRCNNSingleResultCPUParse) {
     ASSERT_NE(engine, nullptr);
 
-    auto result = engine->run(*image_NG, mean, std);
+    auto result = engine->run(image_NG, mean, std);
     ASSERT_NE(result->defect_num(), 0);
     
     FMT_INFO(result->format());
-    cv::imwrite("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/DetAppCase.FasterRCNNSingleResultParse__result_format.jpg", result->format(*image_NG));
+    cv::imwrite("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/DetAppCase.FasterRCNNSingleResultParse__result_format.jpg", result->format(image_NG));
 }
 
 TEST_F(DetAppCase, FasterRCNNMultiResultCPUParse) {
     ASSERT_NE(engine, nullptr);
 
-    auto results = engine->run(*images_NG, mean, std);
+    auto results = engine->run(images_NG, mean, std);
 
     for (int i = 0; i < results.size(); ++i) {
         FMT_INFO(results[i]->format());
-        cv::imwrite(iLogger::string_format("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/DetAppCase.FasterRCNNMultiResultCPUParse__result_format_%d.jpg", i), results[i]->format((*images_NG)[i]));
+        cv::imwrite(iLogger::string_format("workspace/DetAppCase.FasterRCNNMultiResultCPUParse__result_format_%d.jpg", i), results[i]->format(images_NG[i]));
     }
 }
 
@@ -95,23 +93,23 @@ TEST_F(DetAppCase, EmptyInputImage) {
 
 TEST_F(DetAppCase, EmptyMultiInputImage) {
     ASSERT_NE(engine, nullptr);
-    for (auto& image : *images_NG) {
+    for (auto& image : images_NG) {
         image = cv::Mat();
     }
     // 无论有多少个空图片也不应该core掉
     // 把空图片赋值为相应尺寸的全0图片，并警告
-    auto results = engine->run(*images_NG, mean, std);
+    auto results = engine->run(images_NG, mean, std);
 
     for (int i = 0; i < results.size(); ++i) {
         FMT_INFO(results[i]->format());
-        cv::imwrite(iLogger::string_format("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/DetAppCase.FasterRCNNMultiResultCPUParse__result_format_%d.jpg", i), results[i]->format((*images_NG)[i]));
+        cv::imwrite(iLogger::string_format("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/DetAppCase.FasterRCNNMultiResultCPUParse__result_format_%d.jpg", i), results[i]->format(images_NG[i]));
     }
 }
 
 TEST_F(DetAppCase, DetResultAPI) {
     ASSERT_NE(engine, nullptr);
 
-    auto results = engine->run(*images_NG, mean, std);
+    auto results = engine->run(images_NG, mean, std);
 
     for (auto& result : results) {
         INFO("---------Current Result DetResultAPI TEST----------");
@@ -158,20 +156,20 @@ TEST_F(DetAppCase, DetResultAPI) {
 //     // 期望在这里直接ASSERT掉
 //     auto empty_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/model/trt/wrong.trt", Detection::faster_rcnn_parser);
 //     INFO("SHOULD NOT BE HERE");
-//     auto result = empty_engine->run(*image_OK, mean, std);
+//     auto result = empty_engine->run(image_OK, mean, std);
 // }
 
 // TEST_F(DetAppCase, OverNumberMultiInputImage) {
 //     ASSERT_NE(engine, nullptr);
 //     images_NG->push_back(cv::Mat(2, 2, CV_8UC3, cv::Scalar(0, 0, 0)));
 //     // 期望在这里志记并core掉
-//     engine->run(*images_NG, mean, std);
+//     engine->run(images_NG, mean, std);
 // }
 
 // TEST_F(DetAppCase, EmptyFormatInputImage) {
 //     ASSERT_NE(engine, nullptr);
 
-//     auto result = engine->run(*image_NG, mean, std);
+//     auto result = engine->run(image_NG, mean, std);
 //     cv::Mat empty_img;
 //     // 期望在format函数里给出警告
 //     cv::imwrite("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/DetAppCase.FasterRCNNSingleResultParse__result_format.jpg", result->format(empty_img));
