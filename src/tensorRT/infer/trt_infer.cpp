@@ -61,7 +61,6 @@ namespace TRT {
 
 			if(pdata == nullptr || size == 0)
 				return false;
-
 			owner_stream_ = true;
 			checkCudaRuntime(cudaStreamCreate(&stream_));
 			if(stream_ == nullptr)
@@ -70,7 +69,7 @@ namespace TRT {
 			runtime_ = shared_ptr<IRuntime>(createInferRuntime(gLogger), destroy_nvidia_pointer<IRuntime>);
 			if (runtime_ == nullptr)
 				return false;
-
+			initLibNvInferPlugins(&gLogger, "");
 			engine_ = shared_ptr<ICudaEngine>(runtime_->deserializeCudaEngine(pdata, size, nullptr), destroy_nvidia_pointer<ICudaEngine>);
 			if (engine_ == nullptr)
 				return false;
@@ -147,6 +146,7 @@ namespace TRT {
 		std::vector<void*> bindingsPtr_;
 		std::shared_ptr<MixMemory> workspace_;
 		int device_ = 0;
+		int max_batch_size_ = 0;
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ namespace TRT {
 		
 		EngineContext* context = (EngineContext*)this->context_.get();
 		int nbBindings = context->engine_->getNbBindings();
-		int max_batchsize = context->engine_->getMaxBatchSize();
+		// int max_batchsize = context->engine_->getMaxBatchSize();
 
 		inputs_.clear();
 		inputs_name_.clear();
@@ -272,7 +272,13 @@ namespace TRT {
 			auto dims = context->engine_->getBindingDimensions(i);
 			auto type = context->engine_->getBindingDataType(i);
 			const char* bindingName = context->engine_->getBindingName(i);
-			dims.d[0] = max_batchsize;
+			if (dims.d[0] == -1) {
+				FMT_INFOW("When tensorRT_Pro using in TensorRT(8.1 < version < 8.4), get_max_batch_size() MAY be wrong!!! Recommend you to update your TensorRT >= 8.4!");
+				max_batch_size_ = context->engine_->getMaxBatchSize();
+				dims.d[0] = max_batch_size_;
+			} else if (max_batch_size_ == 0) {
+				max_batch_size_ = dims.d[0];
+			}
 			auto newTensor = make_shared<Tensor>(dims.nbDims, dims.d, convert_trt_datatype(type));
 			newTensor->set_stream(this->context_->stream_);
 			newTensor->set_workspace(this->workspace_);
@@ -418,8 +424,8 @@ namespace TRT {
 	}
 
 	int InferImpl::get_max_batch_size() {
-		Assert(this->context_ != nullptr);
-		return this->context_->engine_->getMaxBatchSize();
+		Assert(this->context_ != nullptr && max_batch_size_ != 0);
+		return max_batch_size_;
 	}
 
 	std::shared_ptr<Tensor> InferImpl::tensor(const std::string& name) {
