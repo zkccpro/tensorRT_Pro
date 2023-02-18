@@ -2,7 +2,9 @@
 #include <ilogger.hpp>
 
 cv::Size2f preprocessing::resize_keep_aspect_ratio(const cv::Mat& input, const cv::Size& dst_size, cv::Mat& output) {
-    //const cv::Mat& temp_input = input;  // keep header (required if the function was called with same input and output)
+    if (dst_size.width % 32 != 0 || dst_size.height % 32 != 0) {
+        FMT_INFOF("Error: input layer size must be mod of 32");
+    }
     const int input_cols = input.cols;
     const int input_rows = input.rows;
     float h = dst_size.width  * (input.rows / (float) input.cols);

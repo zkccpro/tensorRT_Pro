@@ -6,7 +6,7 @@
 class DetAppCase : public ::testing::Test {
 protected:
     virtual void SetUp() {
-        initLibAmirstanInferPlugins();
+        App::use_amirstan_plugin();
         engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=1_trt8.trt", Detection::faster_rcnn_parser);
         image_OK = std::make_shared<cv::Mat>(cv::imread("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/OK_origin.jpg"));
         image_NG = std::make_shared<cv::Mat>(cv::imread("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/NG_origin.jpg"));
@@ -108,6 +108,49 @@ TEST_F(DetAppCase, EmptyMultiInputImage) {
     }
 }
 
+TEST_F(DetAppCase, DetResultAPI) {
+    ASSERT_NE(engine, nullptr);
+
+    auto results = engine->run(*images_NG, mean, std);
+
+    for (auto& result : results) {
+        INFO("---------Current Result DetResultAPI TEST----------");
+        // get immutable defects API
+        std::vector<Detection::BBox> im_defects = result->immutable_defects();
+        ASSERT_EQ(im_defects.size(), result->defect_num());
+        int origin_bbox_num = result->defect_num();
+        FMT_INFO("origin_bbox_num is: %d", origin_bbox_num);
+
+        int add_num {5};
+        for (int i = 0; i < add_num; ++i) {
+            im_defects.emplace_back(1, 2, 3, 4, 5, 6);
+        }
+        ASSERT_EQ(origin_bbox_num, result->defect_num());
+
+        im_defects.clear();
+        ASSERT_EQ(origin_bbox_num, result->defect_num());
+
+        // get mutable defects API
+        std::vector<Detection::BBox>& defects = result->mutable_defects();
+        ASSERT_EQ(defects.size(), result->defect_num());
+        origin_bbox_num = result->defect_num();
+        FMT_INFO("origin_bbox_num is: %d", origin_bbox_num);
+
+        add_num = 10;
+        for (int i = 0; i < add_num; ++i) {
+            defects.emplace_back(1, 2, 3, 4, 5, 6);
+        }
+        ASSERT_EQ(defects.size(), result->defect_num());
+        ASSERT_EQ(origin_bbox_num + add_num, result->defect_num());
+        FMT_INFO("cur bbox num is: %d", result->defect_num());
+
+        defects.clear();
+        ASSERT_EQ(defects.size(), result->defect_num());
+        ASSERT_EQ(0, result->defect_num());
+        ASSERT_EQ(true, result->ok());
+        FMT_INFO("cur bbox num is: %d", result->defect_num());
+    }
+}
 
 /// 期望assert掉的边界测例
 

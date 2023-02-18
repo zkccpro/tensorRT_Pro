@@ -7,7 +7,7 @@
 class BenchMark : public ::testing::Test {
 protected:
     virtual void SetUp() {
-        initLibAmirstanInferPlugins();
+        App::use_amirstan_plugin();
 
         image_NG = std::make_shared<cv::Mat>(cv::imread("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/NG_origin.jpg"));
         images_NG = std::make_shared<std::vector<cv::Mat>>();
