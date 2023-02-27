@@ -33,7 +33,7 @@ namespace Detection {
         return dst;
     }
 
-    int DetectionParser::buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) {
+    int DetectionParser::buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) const {
         // if buffer is on gpu: buffer.to_cpu();
         int batch_size = buffer.shape(0);
         // if batch_size != defect_nums.size(): 报错
@@ -44,14 +44,14 @@ namespace Detection {
             for (int j = 0; j < defect_nums[i] * NUM_BBOX_ELEMENT; j += NUM_BBOX_ELEMENT) {
                 bboxes.emplace_back(buffer.at<float>(i, j), buffer.at<float>(i, j + 1),
                                         buffer.at<float>(i, j + 2), buffer.at<float>(i, j + 3), 
-                                        buffer.at<float>(i, j + 4), buffer.at<float>(i, j + 5));
+                                        buffer.at<float>(i, j + 4), buffer.at<int>(i, j + 5));
             }
             result.emplace_back(std::make_shared<DetResult>(bboxes));
         }
         return 0;
     }
 
-    std::vector<int> FasterRCNNParser::output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) {
+    std::vector<int> AmirstanDetectionParser::output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) const {
         auto& defects_info = output[0]; // shape: batch*1
         auto& bboxes_info = output[1]->to_cpu(); // shape: batch*100*4
         auto& scores_info = output[2]->to_cpu(); // shape: batch*100
@@ -67,12 +67,38 @@ namespace Detection {
             for (int j = 0; j < defect_num; ++j) { // defect
                 for (int k = 0; k < 4; ++k) { // left, top, right, bottom
                     buffer.at<float>(i, j * NUM_BBOX_ELEMENT + k) = bboxes_info.at<float>(i, j, k);
-                    // std::cout << bboxes_info.at<float>(i, j, k) << " ";
                 }
-                // std::cout << std::endl;
                 buffer.at<float>(i, j * NUM_BBOX_ELEMENT + 4) = scores_info.at<float>(i, j);
                 buffer.at<float>(i, j * NUM_BBOX_ELEMENT + 5) = classes_info.at<float>(i, j);
-                // std::cout << scores_info.at<float>(i, j) << " " << classes_info.at<float>(i, j) << std::endl;
+            }
+        }
+        return defect_nums;
+    }
+
+    std::vector<int> MMDeployDetectionParser::output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) const {
+        auto& defs_info = output[0]->to_cpu(); // shape: batch*100*5, (left, top, right, bottom, score)
+        auto& labels_info = output[1]->to_cpu(); // shape: batch*100
+        std::vector<int> defect_nums;
+        int batch_size = defs_info.shape(0);
+        FMT_INFOD("parse batch_size: %d", batch_size);
+        buffer.resize(batch_size, MAX_IMAGE_BBOX * NUM_BBOX_ELEMENT).to_cpu();
+        for (int i = 0; i < batch_size; ++i) { // batch
+        int defect_num { 0 };
+            for (int z = 0; z < MAX_IMAGE_BBOX; ++z) {
+                if (defs_info.at<float>(i, z, 4) > 0.) {
+                    ++defect_num;
+                } else {
+                    break;
+                }
+            }
+            FMT_INFOD("parse defect_num: %d", defect_num);
+            defect_nums.push_back(defect_num);
+            for (int j = 0; j < defect_num; ++j) { // defect
+                for (int k = 0; k < 4; ++k) { // left, top, right, bottom
+                    buffer.at<float>(i, j * NUM_BBOX_ELEMENT + k) = defs_info.at<float>(i, j, k);
+                }
+                buffer.at<float>(i, j * NUM_BBOX_ELEMENT + 4) = defs_info.at<float>(i, j, 4);
+                buffer.at<int>(i, j * NUM_BBOX_ELEMENT + 5) = labels_info.at<int>(i, j);
             }
         }
         return defect_nums;

@@ -3,12 +3,12 @@
 #include <builder/trt_builder.hpp>
 #include <infer/trt_infer.hpp>
 #include <opencv2/opencv.hpp>
-#include <plugin/amirInferPlugin.h>
+// #include <plugin/amirInferPlugin.h>
 #include <memory>
 #include <vector>
 
 TEST(BaseCase, InitEngine) {
-    initLibAmirstanInferPlugins();
+    // initLibAmirstanInferPlugins();
     auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
     ASSERT_NE(engine, nullptr);
     // print model info
@@ -16,7 +16,7 @@ TEST(BaseCase, InitEngine) {
 }
 
 TEST(BaseCase, Forward) {
-    initLibAmirstanInferPlugins();
+    //initLibAmirstanInferPlugins();
     auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
     ASSERT_NE(engine, nullptr);
     // print model info
@@ -45,7 +45,7 @@ TEST(BaseCase, Forward) {
 }
 
 TEST(BaseCase, All) {
-    initLibAmirstanInferPlugins();
+    //initLibAmirstanInferPlugins();
     auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
 
     // print model info

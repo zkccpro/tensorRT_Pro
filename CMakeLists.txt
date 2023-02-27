@@ -21,7 +21,7 @@ set(CUDA_TOOLKIT_ROOT_DIR     "/usr/local/cuda-11.1")
 set(CUDNN_DIR    "/usr/local/cudnn8.0.4")
 # set(TENSORRT_DIR "/env/TensorRT-7.2.3.4")
 set(TENSORRT_DIR "/env/TensorRT-8.2.2.1")
-
+set(MMDEPLOY_TRTOPS_DIR "third_party/mmdeploy/csrc/mmdeploy/backend_ops/tensorrt")
 
 # set(CUDA_TOOLKIT_ROOT_DIR     "/data/sxai/lean/cuda-10.2")
 # set(CUDNN_DIR    "/data/sxai/lean/cudnn7.6.5.32-cuda10.2")
@@ -42,11 +42,13 @@ find_package(OpenCV)
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/src/app
-    # ${PROJECT_SOURCE_DIR}/src/application
     ${PROJECT_SOURCE_DIR}/src/tensorRT
     ${PROJECT_SOURCE_DIR}/src/tensorRT/common
-    ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/include
-    ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/src/plugin/common
+    # ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/include
+    # ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/src/plugin/common
+    ${MMDEPLOY_TRTOPS_DIR}
+    ${MMDEPLOY_TRTOPS_DIR}/../common
+    ${MMDEPLOY_TRTOPS_DIR}/common
     ${OpenCV_INCLUDE_DIRS}
     ${CUDA_TOOLKIT_ROOT_DIR}/include
     ${PROTOBUF_DIR}/include
@@ -72,8 +74,10 @@ endif()
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O0 -Wfatal-errors -pthread -w -g")
 set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11 -O0 -Xcompiler -fPIC -g -w ${CUDA_GEN_CODE}")
-file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu)
+# file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp)
+# file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu)
+file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp ${MMDEPLOY_TRTOPS_DIR}/*.cpp)
+file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu ${MMDEPLOY_TRTOPS_DIR}/*.cu)
 cuda_add_library(plugin_list SHARED ${cuda_srcs})
 target_link_libraries(plugin_list nvinfer nvinfer_plugin)
 target_link_libraries(plugin_list cuda cublas cudart cudnn)
@@ -82,7 +86,7 @@ target_link_libraries(plugin_list ${OpenCV_LIBS})
 
 # add_executable(pro ${cpp_srcs}) # 直接作为工程编译
 # 编译单测
-file(GLOB cpp_tests ${PROJECT_SOURCE_DIR}/test/*.cpp)
+file(GLOB_RECURSE cpp_tests ${PROJECT_SOURCE_DIR}/test/*.cpp)
 add_executable(pro ${cpp_srcs} ${cpp_tests}) # 编译单测
 
 # 如果提示插件找不到，请使用dlopen(xxx.so, NOW)的方式手动加载可以解决插件找不到问题

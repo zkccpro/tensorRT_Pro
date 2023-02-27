@@ -7,15 +7,13 @@
 class BenchMark : public ::testing::Test {
 protected:
     virtual void SetUp() {
-        App::use_amirstan_plugin();
-
         image_NG = cv::imread("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/NG_origin.jpg");
 
-        trt8_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=1_trt8.trt", Detection::faster_rcnn_parser);
-        multibatch_trt8_engine = App::create_infer<Detection::DetResult>("/zkcc_workspace/zkccpro/tensorRT_Pro/workspace/faster_rcnn_batch=8_trt8.trt", Detection::faster_rcnn_parser);
-        for (int i = 0; i < multibatch_trt8_engine->mutable_infer()->get_max_batch_size(); ++i) {
-            images_NG.push_back(image_NG);
-        }
+        trt8_engine = CREATE_MMDEPLOY_PLUGIN_DET_INFER("faster_rcnn_mmdeploy.trt");
+        // multibatch_trt8_engine = CREATE_MMDEPLOY_PLUGIN_DET_INFER("faster_rcnn_mmdeploy.trt");
+        // for (int i = 0; i < multibatch_trt8_engine->immutable_infer()->get_max_batch_size(); ++i) {
+        //     images_NG.push_back(image_NG);
+        // }
     }
     // 记得初始化哦...
     std::shared_ptr<App::Engine<Detection::DetResult>> trt8_engine;
