@@ -7,3 +7,6 @@
 [submodule "third_party/mmdeploy"]
 	path = third_party/mmdeploy
 	url = https://github.com/open-mmlab/mmdeploy.git
+[submodule "third_party/amirstan_plugin"]
+	path = third_party/amirstan_plugin
+	url = https://github.com/zkccpro/amirstan_plugin.git

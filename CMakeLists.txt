@@ -16,25 +16,16 @@ set(CUDA_GEN_CODE "-gencode=arch=compute_86,code=sm_86")
 
 # 如果你的opencv找不到，可以自己指定目录
 set(OpenCV_DIR   "/env/opencv-4.5.4/build")
-
 set(CUDA_TOOLKIT_ROOT_DIR     "/usr/local/cuda-11.1")
 set(CUDNN_DIR    "/usr/local/cudnn8.0.4")
-# set(TENSORRT_DIR "/env/TensorRT-7.2.3.4")
 set(TENSORRT_DIR "/env/TensorRT-8.2.2.1")
+
 set(MMDEPLOY_TRTOPS_DIR "third_party/mmdeploy/csrc/mmdeploy/backend_ops/tensorrt")
-
-# set(CUDA_TOOLKIT_ROOT_DIR     "/data/sxai/lean/cuda-10.2")
-# set(CUDNN_DIR    "/data/sxai/lean/cudnn7.6.5.32-cuda10.2")
-# set(TENSORRT_DIR "/data/sxai/lean/TensorRT-7.0.0.11")
-
-# set(CUDA_TOOLKIT_ROOT_DIR  "/data/sxai/lean/cuda-11.1")
-# set(CUDNN_DIR    "/data/sxai/lean/cudnn8.2.2.26")
-# set(TENSORRT_DIR "/data/sxai/lean/TensorRT-7.2.1.6")
+set(AMIRSTAN_OPS_DIR "third_party/amirstan_plugin")
 
 # 因为protobuf，需要用特定版本，所以这里指定路径
 # 我直接把protobuf-3.11.4安装到/usr/local/路径下了(protobuf源码安装时make install)
 set(PROTOBUF_DIR "/usr/local")
-
 
 find_package(CUDA REQUIRED)
 find_package(OpenCV)
@@ -44,17 +35,32 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/src/app
     ${PROJECT_SOURCE_DIR}/src/tensorRT
     ${PROJECT_SOURCE_DIR}/src/tensorRT/common
-    # ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/include
-    # ${PROJECT_SOURCE_DIR}/src/tensorRT/amirstan_plugin/src/plugin/common
-    ${MMDEPLOY_TRTOPS_DIR}
-    ${MMDEPLOY_TRTOPS_DIR}/../common
-    ${MMDEPLOY_TRTOPS_DIR}/common
+    # ${AMIRSTAN_OPS_DIR}/include
+    # ${AMIRSTAN_OPS_DIR}/src/plugin/common
+    # ${MMDEPLOY_TRTOPS_DIR}
+    # ${MMDEPLOY_TRTOPS_DIR}/../common
+    # ${MMDEPLOY_TRTOPS_DIR}/common
     ${OpenCV_INCLUDE_DIRS}
     ${CUDA_TOOLKIT_ROOT_DIR}/include
     ${PROTOBUF_DIR}/include
     ${TENSORRT_DIR}/include
     ${CUDNN_DIR}/include
 )
+
+if ("${OPS_LIB}" MATCHES "amirstan")
+    include_directories(
+        ${AMIRSTAN_OPS_DIR}/include
+        ${AMIRSTAN_OPS_DIR}/src/plugin/common
+    )
+endif()
+
+if ("${OPS_LIB}" MATCHES "mmdeploy")
+    include_directories(
+        ${MMDEPLOY_TRTOPS_DIR}
+        ${MMDEPLOY_TRTOPS_DIR}/../common
+        ${MMDEPLOY_TRTOPS_DIR}/common
+    )
+endif()
 
 # 切记，protobuf的lib目录一定要比tensorRT目录前面，因为tensorRTlib下带有protobuf的so文件
 # 这可能带来错误
@@ -74,10 +80,18 @@ endif()
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O0 -Wfatal-errors -pthread -w -g")
 set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11 -O0 -Xcompiler -fPIC -g -w ${CUDA_GEN_CODE}")
-# file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp)
-# file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu)
-file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp ${MMDEPLOY_TRTOPS_DIR}/*.cpp)
-file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu ${MMDEPLOY_TRTOPS_DIR}/*.cu)
+
+if ("${OPS_LIB}" MATCHES "amirstan")
+    file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp ${AMIRSTAN_OPS_DIR}/*.cpp)
+    file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu ${AMIRSTAN_OPS_DIR}/*.cu)
+
+endif()
+
+if ("${OPS_LIB}" MATCHES "mmdeploy")
+    file(GLOB_RECURSE cpp_srcs ${PROJECT_SOURCE_DIR}/src/*.cpp ${MMDEPLOY_TRTOPS_DIR}/*.cpp)
+    file(GLOB_RECURSE cuda_srcs ${PROJECT_SOURCE_DIR}/src/*.cu ${MMDEPLOY_TRTOPS_DIR}/*.cu)
+endif()
+
 cuda_add_library(plugin_list SHARED ${cuda_srcs})
 target_link_libraries(plugin_list nvinfer nvinfer_plugin)
 target_link_libraries(plugin_list cuda cublas cudart cudnn)
