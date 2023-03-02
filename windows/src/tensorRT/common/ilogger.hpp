@@ -22,7 +22,7 @@ namespace iLogger{
     using namespace std;
 
     template<typename ... Args>
-    string string_format(const string& format, Args ... args){
+    string string_format(const string& format, Args ... args) {
         size_t size = 1 + snprintf(nullptr, 0, format.c_str(), args ...);  // Extra space for \0
         unique_ptr<char[]> buf(new char[size]);
         snprintf(buf.get(), size, format.c_str(), args ...);

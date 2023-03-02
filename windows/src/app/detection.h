@@ -47,24 +47,30 @@ namespace Detection {
         std::vector<BBox> bboxes_;
     };
     
-    /// 各个算法的 output parser
+    /// 各个算子库的 output parser
     class DetectionParser : public App::OutputParser<DetResult> {
     protected:
-        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
-        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
-        virtual int buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums);
+        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer)       const = 0;
+        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) const = 0;
+        virtual int              buffer2struct(std::vector<std::shared_ptr<DetResult>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) const;
     };
 
-    class FasterRCNNParser : public DetectionParser {
+    class AmirstanDetectionParser : public DetectionParser, public App::AmirstanPluginParser<DetResult> {
     protected:
-        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) override;
-        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) override { return {}; }
+        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer)       const override;
+        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) const override { return {}; }
+    };
+
+    class MMDeployDetectionParser : public DetectionParser, public App::MMDeployPluginParser<DetResult> {
+    protected:
+        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer)       const override;
+        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) const override { return {}; }
     };
     // and so on ...
 
     /// 各个parser的全局实例化，todo: 改成全局注册
-    static FasterRCNNParser faster_rcnn_parser {};
-    // YOLOV5Parser yolo_v5_parser;
+    const static std::shared_ptr<AmirstanDetectionParser> amirstan_det_plg_parser {std::make_shared<AmirstanDetectionParser>()};
+    const static std::shared_ptr<MMDeployDetectionParser> mmdeploy_det_plg_parser {std::make_shared<MMDeployDetectionParser>()};
     // and so on ...
     
 }; // namespace Detection

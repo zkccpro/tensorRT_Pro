@@ -8,12 +8,15 @@
 #include <array>
 #include <memory>
 
-#include <plugin/amirInferPlugin.h>
+// #include <plugin/amirInferPlugin.h>
 #include <infer/trt_infer.hpp>
 #include <opencv2/opencv.hpp>
 #include <ilogger.hpp>
 
 namespace App {
+    #define CREATE_AMIRSTAN_PLUGIN_DET_INFER(path) App::create_infer<Detection::DetResult>(path, std::dynamic_pointer_cast<App::BaseParser<Detection::DetResult>>(Detection::amirstan_det_plg_parser))
+    #define CREATE_MMDEPLOY_PLUGIN_DET_INFER(path) App::create_infer<Detection::DetResult>(path, std::dynamic_pointer_cast<App::BaseParser<Detection::DetResult>>(Detection::mmdeploy_det_plg_parser))
+
     class Result {
     public:
         virtual ~Result() = default;
@@ -22,11 +25,24 @@ namespace App {
     };
     
     template<typename R>
-    class OutputParser {
+    class BaseParser {
+    public:
+        virtual ~BaseParser() = default;
+
+        virtual int         parse(std::vector<std::shared_ptr<TRT::Tensor>>& output, std::vector<std::shared_ptr<R>>& result, int device=0) const { return 0; }
+        virtual const char* get_plugin_name() const { return ""; }
+        virtual bool        check_valid(const std::vector<std::shared_ptr<TRT::Tensor>>& outputs) const {
+            INFOF("PluginParser Inheritance error!");
+            return false;
+        }
+    };
+
+    template<typename R>
+    class OutputParser : virtual public BaseParser<R> {
     public:
         virtual ~OutputParser() = default;
         // device: 0->cpu; 1->gpu
-        int parse(std::vector<std::shared_ptr<TRT::Tensor>>& output, std::vector<std::shared_ptr<R>>& result, int device=0) {
+        int parse(std::vector<std::shared_ptr<TRT::Tensor>>& output, std::vector<std::shared_ptr<R>>& result, int device=0) const override {
             TRT::Tensor buffer(TRT::DataType::Float);
             std::vector<int> defect_nums;
             if (device == 0) {
@@ -38,14 +54,25 @@ namespace App {
             buffer2struct(result, buffer, defect_nums);
             return 0;
         }
-        
     protected:
         // 把output tensor中的内容解到统一的buffer tensor中
         // return: 每个图像的目标(缺陷)数
-        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
-        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) = 0;
+        virtual std::vector<int> output2buffer_cpu(std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer)       const = 0;
+        virtual std::vector<int> output2buffer_gpu(const std::vector<std::shared_ptr<TRT::Tensor>>& output, TRT::Tensor& buffer) const = 0;
         // 把buffer中的内容解到Result结构体中
-        virtual int buffer2struct(std::vector<std::shared_ptr<R>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) { return 0; }
+        virtual int buffer2struct(std::vector<std::shared_ptr<R>>& result, TRT::Tensor& buffer, const std::vector<int>& defect_nums) const { return 0; }
+    };
+
+    template<typename R>
+    class PluginParser : virtual public BaseParser<R> {
+    public:
+        PluginParser() = default;
+        explicit PluginParser(std::string&& r_str) : plugin_name_(r_str) { }
+        virtual ~PluginParser() = default;
+
+        virtual const char* get_plugin_name() const override { return plugin_name_.c_str(); }
+    protected:
+        const std::string plugin_name_;
     };
     
     // 某一任务的推理引擎，该任务以R为结果类型
@@ -53,21 +80,51 @@ namespace App {
     class Engine {
     public:
         Engine() = default;
-        Engine(const std::string& path, OutputParser<R>& parser) :
-            engine_(TRT::load_infer(path)), parser_(&parser) {
-            if (! engine_) {
-                INFOF("Engine is nullptr, please check the path of infer!");
+        Engine(const std::string& path, const std::shared_ptr<BaseParser<R>> parser) :
+            engine_(TRT::load_infer(path)), parser_(parser) {
+            if (! parser_) {
+                INFOF("parser load fail, please check your parser!");
             }
+            if (! engine_) {
+                INFOF("Engine load fail, please check the path of plan file!");
+            }
+            int num_output = engine_->num_output();
+            std::vector<std::shared_ptr<TRT::Tensor>> output;
+            output.reserve(num_output);
+            for (int i = 0; i < num_output; ++i) {
+                output.push_back(engine_->output(i));
+            }
+            FMT_INFO("using %s", parser_->get_plugin_name());
+            if (! parser_->check_valid(output)) {
+                FMT_INFOW("opt plugin does not match, may cause incorrect result or even CORE!!! please change the parser or re-import onnx file with correct plugin!");
+            } else {
+                INFO("opt plugin check passed!");
+            }
+
             engine_->print();
         }
 
-        std::shared_ptr<TRT::Infer> mutable_infer() {return engine_;}
+        std::shared_ptr<TRT::Infer>& mutable_infer() {
+            if (! engine_) {
+                INFOF("Engine load fail, please check the path of plan file!");
+            }
+            return engine_;
+        }
+        const std::shared_ptr<const TRT::Infer> immutable_infer() {
+            if (! engine_) {
+                INFOF("Engine load fail, please check the path of plan file!");
+            }
+            return engine_;
+        }
 
         // 输入预处理后的单张图片，同步执行：塞进input tensor -> forward -> parse output
         std::shared_ptr<R> run(cv::Mat& image, std::array<float, 3>& mean, std::array<float, 3>& std) {
             if (image.empty()) {
                 INFOW("Input image is empty, please check input image!");
                 return nullptr;
+            }
+            if (! engine_) {
+                INFOF("Engine load fail, please check the path of plan file!");
             }
             
             auto input = engine_->input(0);
@@ -93,6 +150,9 @@ namespace App {
 
         // TODO: 推理多张图片（batch_size > 1）
         std::vector<std::shared_ptr<R>> run(std::vector<cv::Mat>& images, std::array<float, 3>& mean, std::array<float, 3>& std) {
+            if (! engine_) {
+                INFOF("Engine load fail, please check the path of plan file!");
+            }
             int images_size = images.size();
             int max_batch_size = engine_->get_max_batch_size();
             // 图片数量大于引擎最大批处理数量，assert；TODO:更温和的策略
@@ -135,21 +195,160 @@ namespace App {
         }
     private:
         std::shared_ptr<TRT::Infer> engine_;
-        OutputParser<R>* parser_;
+        const std::shared_ptr<BaseParser<R>> parser_;
     };
     
     // 创建引擎函数，推理结果类型为R
     template<typename R>
     std::shared_ptr<Engine<R>> create_infer (
         const std::string& path,
-        OutputParser<R>& parser) {
+        const std::shared_ptr<BaseParser<R>> parser) {
         return std::make_shared<Engine<R>>(path, parser);
     }
 
-    // 启用amirstan_plugin算子
-    int use_amirstan_plugin();
-    
+    template<typename R>
+    class AmirstanPluginParser : public PluginParser<R> {
+    public:
+        AmirstanPluginParser() : PluginParser<R>("amirstan_plugin") { }
+        virtual bool check_valid(const std::vector<std::shared_ptr<TRT::Tensor>>& outputs) const override;
+    };
+
+    template<typename R>
+    class MMDeployPluginParser : public PluginParser<R> {
+    public:
+        MMDeployPluginParser() : PluginParser<R>("mmdeploy_plugin") { }
+        virtual bool check_valid(const std::vector<std::shared_ptr<TRT::Tensor>>& outputs) const override;
+    };
+    // and so on ...
+
 }; // namespace App
 
+
+// 第0维一般是动态batch，不检查
+#define CHECK_OUTPUTS_NUM(outputs, outputs_num_expect)  if (outputs.size() != outputs_num_expect) {                         \
+                                                            FMT_INFOW(err_info, iLogger::format(                            \
+                                                                "output tensor number error, expect num is %d, but got %d", \
+                                                                outputs_num_expect, outputs.size()).c_str());               \
+                                                            return false;                                                   \
+                                                        }
+#define CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, output_idx, err_info, type_expect)    if (tensor->type() != type_expect) {                                          \
+                                                                                            FMT_INFOW(err_info,                                                       \
+                                                                                            iLogger::string_format(                                                   \
+                                                                                            "output tensor %d data type error, expect %s, but got %s",                \
+                                                                                            output_idx, TRT::data_type_string(type_expect),                           \
+                                                                                            TRT::data_type_string(tensor->type())).c_str());                          \
+                                                                                            return false;                                                             \
+                                                                                        }
+#define CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, output_idx, err_info, ndims_expect)   if (tensor->ndims() != ndims_expect) {                         \
+                                                                                        FMT_INFOW(err_info,                                        \
+                                                                                        iLogger::string_format(                                    \
+                                                                                        "output tensor %d ndims error, expect %d, but got %d",     \
+                                                                                        output_idx, ndims_expect, tensor->ndims()).c_str());       \
+                                                                                        return false;                                              \
+                                                                                    }
+#define CHECK_2_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, output_idx, err_info, shape_1_expect)   if (tensor->shape(1) != shape_1_expect) {                                        \
+                                                                                                FMT_INFOW(err_info,                                                          \
+                                                                                                iLogger::string_format(                                                      \
+                                                                                                "output tensor %d shape error, expect {batch, %d}, but got {batch, %d}",     \
+                                                                                                output_idx, shape_1_expect, tensor->shape(1)).c_str());                      \
+                                                                                                return false;                                                                \
+                                                                                            }
+#define CHECK_3_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, output_idx, err_info, shape_1_expect, shape_2_expect)   if (tensor->shape(1) != shape_1_expect ||                                                \
+                                                                                                                tensor->shape(2) != shape_2_expect) {                                                \
+                                                                                                                FMT_INFOW(err_info,                                                                  \
+                                                                                                                iLogger::string_format(                                                              \
+                                                                                                                "output tensor %d shape error, expect {batch, %d, %d}, but got {batch, %d, %d}",     \
+                                                                                                                output_idx, shape_1_expect, shape_2_expect,                                          \
+                                                                                                                tensor->shape(1), tensor->shape(2)).c_str());                                        \
+                                                                                                                return false;                                                                        \
+                                                                                                            }
+#define CHECK_4_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, output_idx, err_info, shape_1_expect, shape_2_expect, shape_3_expect)   if (tensor->shape(1) != shape_1_expect ||                                                         \
+                                                                                                                                tensor->shape(2) != shape_2_expect ||                                                         \
+                                                                                                                                tensor->shape(3) != shape_3_expect) {                                                         \
+                                                                                                                                FMT_INFOW(err_info,                                                                           \
+                                                                                                                                iLogger::string_format(                                                                       \
+                                                                                                                                "output tensor %d shape error, expect {batch, %d, %d, %d}, but got {batch, %d, %d, %d}",      \
+                                                                                                                                output_idx, shape_1_expect, shape_2_expect, shape_3_expect,                                   \
+                                                                                                                                tensor->shape(1), tensor->shape(2), tensor->shape(3)).c_str());                               \
+                                                                                                                                return false;                                                                                 \
+                                                                                                                            }
+
+template<typename R>
+bool App::AmirstanPluginParser<R>::check_valid(const std::vector<std::shared_ptr<TRT::Tensor>>& outputs) const {
+    const std::string err_info = "network output format is not matched with amirstan plugin, detail msg: %s";
+    CHECK_OUTPUTS_NUM(outputs, 4);
+    for (int i = 0; i < 4; ++i) {
+        const auto& tensor = outputs[i];
+        switch (i) {
+            case 0 : {
+                // tensor name: num_detections
+                // tensor data type: Int32
+                // tensor shape:{batch, 1}
+                CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, i, err_info, TRT::DataType::Int32);
+                CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, i, err_info, 2);
+                CHECK_2_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, i, err_info, 1);
+                break;
+            }
+            case 1 : {
+                // tensor name: boxes
+                // tensor data type: FLoat32
+                // tensor shape:{batch, 100, 4}
+                CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, i, err_info, TRT::DataType::Float);
+                CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, i, err_info, 3);
+                CHECK_3_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, i, err_info, 100, 4);
+                break;
+            }
+            case 2 : {
+                // tensor name: scores
+                // tensor data type: FLoat32
+                // tensor shape:{batch, 100}
+                CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, i, err_info, TRT::DataType::Float);
+                CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, i, err_info, 2);
+                CHECK_2_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, i, err_info, 100);
+                break;
+            }
+            case 3 : {
+                // tensor name: classes
+                // tensor data type: FLoat32
+                // tensor shape:{batch, 100}
+                CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, i, err_info, TRT::DataType::Float);
+                CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, i, err_info, 2);
+                CHECK_2_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, i, err_info, 100);
+                break;
+            }
+        }
+    }
+    return true;
+}
+
+template<typename R>
+bool App::MMDeployPluginParser<R>::check_valid(const std::vector<std::shared_ptr<TRT::Tensor>>& outputs) const {
+    const std::string err_info = "network output format is not matched with mmdeploy tensorrt plugin, detail msg: %s";
+    CHECK_OUTPUTS_NUM(outputs, 2);
+    for (int i = 0; i < 2; ++i) {
+        const auto& tensor = outputs[i];
+        switch (i) {
+            case 0 : {
+                // tensor name: dets
+                // tensor data type: FLoat32
+                // tensor shape:{batch, 100, 5}
+                CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, i, err_info, TRT::DataType::Float);
+                CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, i, err_info, 3);
+                CHECK_3_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, i, err_info, 100, 5);
+                break;
+            }
+            case 1 : {
+                // tensor name: labels
+                // tensor data type: Int32
+                // tensor shape:{batch, 100}
+                CHECK_TENSOR_DATA_TYPE_RET_ASSERT(tensor, i, err_info, TRT::DataType::Int32);
+                CHECK_TENSOR_NDIMS_RET_ASSERT(tensor, i, err_info, 2);
+                CHECK_2_DIM_TENSOR_SHAPE_RET_ASSERT(tensor, i, err_info, 100);
+                break;
+            }
+        }
+    }
+    return true;
+}
 
 #endif // APP_HPP

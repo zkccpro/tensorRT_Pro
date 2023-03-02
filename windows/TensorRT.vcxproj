@@ -18,31 +18,6 @@
     <ClCompile Include="src\app\app.cpp" />
     <ClCompile Include="src\app\detection.cpp" />
     <ClCompile Include="src\app\pre_processing.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptivePoolPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSInference.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\kernel.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\nmsHelper.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafeFeatureReassemblePlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deformableConvPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deform_conv_cuda.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\modulatedDeformableConvPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deformablePoolPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bboxPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\gridAnchorDynamicPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\gridSamplePlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\groupNormPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\InferPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\meshGridPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roiExtractorPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roiPoolPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchBmmPlugin\torchBmmPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torchCumMaxMinPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torchCumPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torchEmbeddingPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torchGatherPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torchNMSPlugin.cpp" />
-    <ClCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torchUnfoldPlugin.cpp" />
     <ClCompile Include="src\tensorRT\builder\trt_builder.cpp" />
     <ClCompile Include="src\tensorRT\common\cuda_tools.cpp" />
     <ClCompile Include="src\tensorRT\common\ilogger.cpp" />
@@ -68,66 +43,29 @@
     <ClCompile Include="test\benchmark.cpp" />
     <ClCompile Include="test\detection_app_test.cpp" />
     <ClCompile Include="test\main.cpp" />
+    <ClCompile Include="test\plugin_parser_test.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_bev_nms\trt_batched_bev_nms.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_nms\trt_batched_nms.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_rotated_nms\trt_batched_rotated_nms.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\batched_nms_kernel.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\instance_norm\trt_instance_norm.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd.cpp" />
     <None Include="dll_export.def" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\app.hpp" />
     <ClInclude Include="src\app\detection.h" />
     <ClInclude Include="src\app\pre_processing.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\common_util.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\cuda_util.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\include\amir_cuda_util\cudnn_util.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\include\plugin\amirInferPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\reduceUtils.cuh" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptivePoolPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptive_pool.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSInference.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\batchedNMSPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\bboxUtils.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\cub_helper.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\kernel.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\nmsUtils.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\plugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafeFeatureReassemblePlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafe_cuda.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\amirCommon.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\common.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\layer_base.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\common\serialize.hpp" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deformableConvPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deform_conv_cuda.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\modulatedDeformableConvPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deformablePoolPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool_cuda_kernel.cuh" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bbox.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bboxPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\gridAnchorDynamicPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\grid_anchor_dynamic.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\gridSamplePlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\grid_sample.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\groupNormPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\group_norm.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\meshGridPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\mesh_grid.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roiExtractorPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roi_extractor.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roiPoolPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roi_pool.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchBmmPlugin\torchBmmPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torchCumMaxMinPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torch_cum_maxmin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torchCumPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torch_cum.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torchEmbeddingPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torch_embedding.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torchGatherPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torch_gather.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\bboxUtils.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torchNMSPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torch_nms.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torchUnfoldPlugin.h" />
-    <ClInclude Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torch_unfold.h" />
     <ClInclude Include="src\tensorRT\builder\trt_builder.hpp" />
     <ClInclude Include="src\tensorRT\common\cuda_tools.hpp" />
     <ClInclude Include="src\tensorRT\common\ilogger.hpp" />
@@ -163,63 +101,68 @@
     <ClInclude Include="src\tensorRT\onnx_parser\toposort.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\trt_utils.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\utils.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\common\modulated_deform_conv\modulated_deform_conv_cpu.h" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_bev_nms\trt_batched_bev_nms.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_nms\trt_batched_nms.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_rotated_nms\trt_batched_rotated_nms.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\common_cuda_helper.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\nms\batched_nms_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\nms\cub_helper.h" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\nms\kernel.h" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\trt_plugin_base.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\trt_plugin_helper.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\trt_serialize.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\instance_norm\trt_instance_norm.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd_kernel.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\memcpyPermute.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\repeatDims.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\tensorMeanVar.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\adaptive_pool.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\allClassNMS.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\common.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\gatherNMSOutputs.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\permuteData.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\sortScoresPerClass.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\sortScoresPerImage.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\carafe_cuda_kernel.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\deform_conv_cuda_kernel.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\deform_roi_pool.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\delta2bbox.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\grid_anchor_dynamic.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\grid_sample.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\group_norm_kernel.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\mesh_grid.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\roi_extractor_kernel.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\roi_pool_kernel.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\torch_cum_maxmin.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\torch_cum.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\torch_embedding.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\torch_gather.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\torch_nms.cu" />
-    <CudaCompile Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\torch_unfold.cu" />
     <CudaCompile Include="src\tensorRT\common\preprocess_kernel.cu" />
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\DCNv2.cu" />
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\HSigmoid.cu" />
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\HSwish.cu" />
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\ScatterND.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\allClassNMS.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\allClassRotatedNMS.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\gatherNMSOutputs.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\permuteData.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\sortScoresPerClass.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\sortScoresPerImage.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\trt_cuda_helper.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd_kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\tensorRT\amirstan_plugin\src\amir_cuda_util\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\adaptivePoolPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\batchedNMSPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\carafeFeatureReassemblePlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\deformableConvPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\deformablePoolPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\delta2bboxPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\gridAnchorDynamicPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\gridSamplePlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\groupNormPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\meshGridPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\roiExtractorPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\roiPoolPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchBmmPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumMaxMinPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchCumPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchEmbeddingPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchGatherPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchNMSPlugin\CMakeLists.txt" />
-    <Text Include="src\tensorRT\amirstan_plugin\src\plugin\torchUnfoldPlugin\CMakeLists.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -272,7 +215,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3-trt8.4.3.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;src/tensorRT/amirstan_plugin/include;src/tensorRT/amirstan_plugin/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/app;third_party/googletest/googletest/include;third_party/googletest/googlemock/include</IncludePath>
+    <IncludePath>./lean/cuda11.3-trt8.4.3.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;third_party/amirstan_plugin_for_windows/include;third_party/amirstan_plugin_for_windows/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/app;third_party/googletest/googletest/include;third_party/googletest/googlemock/include</IncludePath>
     <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.4.3.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);third_party/googletest/build/lib/Debug</LibraryPath>
     <TargetName>$(ProjectName)d</TargetName>
     <ExcludePath>$(ExcludePath)</ExcludePath>
@@ -282,10 +225,10 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda11.3-trt8.4.3.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/tensorRT/amirstan_plugin/include;./src/tensorRT/amirstan_plugin/src/plugin/common;third_party/googletest/googletest/include;third_party/googletest/googlemock/include;./src/app</IncludePath>
-    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.4.3.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.2.2.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);third_party/mmdeploy/csrc/mmdeploy/backend_ops/tensorrt/;third_party/mmdeploy/csrc/mmdeploy/backend_ops/tensorrt/common;third_party/mmdeploy/csrc/mmdeploy/backend_ops/common;third_party/googletest/googletest/include;third_party/googletest/googlemock/include;./src/app</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.2.2.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
-    <ExcludePath>$(ExcludePath)</ExcludePath>
+    <ExcludePath>$(CudaToolkitDir);$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -365,6 +308,12 @@
       <AdditionalCompilerOptions>
       </AdditionalCompilerOptions>
     </CudaCompile>
+    <CudaLink>
+      <UseHostLibraryDirectories>true</UseHostLibraryDirectories>
+    </CudaLink>
+    <CudaLink>
+      <UseHostLibraryDependencies>true</UseHostLibraryDependencies>
+    </CudaLink>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'">
     <ClCompile>

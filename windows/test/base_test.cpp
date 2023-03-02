@@ -3,26 +3,26 @@
 #include <builder/trt_builder.hpp>
 #include <infer/trt_infer.hpp>
 #include <opencv2/opencv.hpp>
-#include <plugin/amirInferPlugin.h>
+// #include <plugin/amirInferPlugin.h>
 #include <memory>
 #include <vector>
 
 TEST(BaseCase, InitEngine) {
-    initLibAmirstanInferPlugins();
-    auto engine = TRT::load_infer("workspace/faster_rcnn_batch=1_trt7.trt");
+    // initLibAmirstanInferPlugins();
+    auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
     ASSERT_NE(engine, nullptr);
     // print model info
     engine->print();
 }
 
 TEST(BaseCase, Forward) {
-    initLibAmirstanInferPlugins();
-    auto engine = TRT::load_infer("workspace/faster_rcnn_batch=1_trt7.trt");
+    //initLibAmirstanInferPlugins();
+    auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
     ASSERT_NE(engine, nullptr);
     // print model info
     engine->print();
 
-    auto image = cv::imread("workspace/OK_origin.jpg");
+    auto image = cv::imread("/zkcc_workspace/data/data_cizhuan/coco/train2017/20220310124752-origin.jpg");
     cv::resize(image, image, cv::Size(2016, 2016));
 
     // get the model input and output node, which can be accessed by name or index
@@ -45,14 +45,14 @@ TEST(BaseCase, Forward) {
 }
 
 TEST(BaseCase, All) {
-    initLibAmirstanInferPlugins();
-    auto engine = TRT::load_infer("workspace/faster_rcnn_batch=1_trt7.trt");
+    //initLibAmirstanInferPlugins();
+    auto engine = TRT::load_infer("/zkcc_workspace/model/trt/faster_rcnn_epoch_10.trt");
 
     // print model info
     engine->print();
 
     // load image
-    auto image = cv::imread("workspace/OK_origin.jpg");
+    auto image = cv::imread("/zkcc_workspace/data/data_cizhuan/coco/train2017/20220310124752-origin.jpg");
     cv::resize(image, image, cv::Size(2016, 2016));
 
     // get the model input and output node, which can be accessed by name or index
