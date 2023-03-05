@@ -61,7 +61,6 @@ namespace TRT {
 
 			if(pdata == nullptr || size == 0)
 				return false;
-
 			owner_stream_ = true;
 			checkCudaRuntime(cudaStreamCreate(&stream_));
 			if(stream_ == nullptr)
@@ -70,7 +69,7 @@ namespace TRT {
 			runtime_ = shared_ptr<IRuntime>(createInferRuntime(gLogger), destroy_nvidia_pointer<IRuntime>);
 			if (runtime_ == nullptr)
 				return false;
-
+			initLibNvInferPlugins(&gLogger, "");
 			engine_ = shared_ptr<ICudaEngine>(runtime_->deserializeCudaEngine(pdata, size, nullptr), destroy_nvidia_pointer<ICudaEngine>);
 			if (engine_ == nullptr)
 				return false;
@@ -108,28 +107,28 @@ namespace TRT {
 		virtual bool load_from_memory(const void* pdata, size_t size);
 		virtual void destroy();
 		virtual void forward(bool sync) override;
-		virtual int get_max_batch_size() override;
-		virtual CUStream get_stream() override;
+		virtual int get_max_batch_size() const override;
+		virtual CUStream get_stream() const override;
 		virtual void set_stream(CUStream stream) override;
 		virtual void synchronize() override;
-		virtual size_t get_device_memory_size() override;
+		virtual size_t get_device_memory_size() const override;
 		virtual std::shared_ptr<MixMemory> get_workspace() override;
-		virtual std::shared_ptr<Tensor> input(int index = 0) override;
-		virtual std::string get_input_name(int index = 0) override;
-		virtual std::shared_ptr<Tensor> output(int index = 0) override;
-		virtual std::string get_output_name(int index = 0) override;
+		virtual std::shared_ptr<Tensor> input(int index = 0) const override;
+		virtual std::string get_input_name(int index = 0) const override;
+		virtual std::shared_ptr<Tensor> output(int index = 0) const override;
+		virtual std::string get_output_name(int index = 0) const override;
 		virtual std::shared_ptr<Tensor> tensor(const std::string& name) override;
-		virtual bool is_output_name(const std::string& name) override;
-		virtual bool is_input_name(const std::string& name) override;
+		virtual bool is_output_name(const std::string& name) const override;
+		virtual bool is_input_name(const std::string& name) const override;
 		virtual void set_input (int index, std::shared_ptr<Tensor> tensor) override;
 		virtual void set_output(int index, std::shared_ptr<Tensor> tensor) override;
 		virtual std::shared_ptr<std::vector<uint8_t>> serial_engine() override;
 
-		virtual void print() override;
+		virtual void print() const override;
 
-		virtual int num_output();
-		virtual int num_input();
-		virtual int device() override;
+		virtual int num_output() const;
+		virtual int num_input() const;
+		virtual int device() const override;
 
 	private:
 		void build_engine_input_and_outputs_mapper();
@@ -147,6 +146,7 @@ namespace TRT {
 		std::vector<void*> bindingsPtr_;
 		std::shared_ptr<MixMemory> workspace_;
 		int device_ = 0;
+		int max_batch_size_ = 0;
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ namespace TRT {
 		checkCudaRuntime(cudaSetDevice(old_device));
 	}
 
-	void InferImpl::print(){
+	void InferImpl::print() const {
 		if(!context_){
 			INFOW("Infer print, nullptr.");
 			return;
@@ -238,7 +238,7 @@ namespace TRT {
 		return true;
 	}
 
-	size_t InferImpl::get_device_memory_size() {
+	size_t InferImpl::get_device_memory_size() const {
 		EngineContext* context = (EngineContext*)this->context_.get();
 		return context->context_->getEngine().getDeviceMemorySize();
 	}
@@ -258,7 +258,7 @@ namespace TRT {
 		
 		EngineContext* context = (EngineContext*)this->context_.get();
 		int nbBindings = context->engine_->getNbBindings();
-		int max_batchsize = context->engine_->getMaxBatchSize();
+		// int max_batchsize = context->engine_->getMaxBatchSize();
 
 		inputs_.clear();
 		inputs_name_.clear();
@@ -272,7 +272,13 @@ namespace TRT {
 			auto dims = context->engine_->getBindingDimensions(i);
 			auto type = context->engine_->getBindingDataType(i);
 			const char* bindingName = context->engine_->getBindingName(i);
-			dims.d[0] = max_batchsize;
+			if (dims.d[0] == -1) {
+				FMT_INFOW("When tensorRT_Pro using in TensorRT(8.1 < version < 8.4), get_max_batch_size() MAY be wrong!!! Recommend you to update your TensorRT >= 8.4!");
+				max_batch_size_ = context->engine_->getMaxBatchSize();
+				dims.d[0] = max_batch_size_;
+			} else if (max_batch_size_ == 0) {
+				max_batch_size_ = dims.d[0];
+			}
 			auto newTensor = make_shared<Tensor>(dims.nbDims, dims.d, convert_trt_datatype(type));
 			newTensor->set_stream(this->context_->stream_);
 			newTensor->set_workspace(this->workspace_);
@@ -301,11 +307,11 @@ namespace TRT {
 			t->set_stream(stream);
 	}
 
-	CUStream InferImpl::get_stream() {
+	CUStream InferImpl::get_stream() const {
 		return this->context_->stream_;
 	}
 
-	int InferImpl::device() {
+	int InferImpl::device() const {
 		return device_;
 	}
 
@@ -313,11 +319,11 @@ namespace TRT {
 		checkCudaRuntime(cudaStreamSynchronize(context_->stream_));
 	}
 
-	bool InferImpl::is_output_name(const std::string& name){
+	bool InferImpl::is_output_name(const std::string& name) const {
 		return std::find(outputs_name_.begin(), outputs_name_.end(), name) != outputs_name_.end();
 	}
 
-	bool InferImpl::is_input_name(const std::string& name){
+	bool InferImpl::is_input_name(const std::string& name) const {
 		return std::find(inputs_name_.begin(), inputs_name_.end(), name) != inputs_name_.end();
 	}
 
@@ -359,11 +365,11 @@ namespace TRT {
 		return workspace_;
 	}
 
-	int InferImpl::num_input() {
+	int InferImpl::num_input() const {
 		return static_cast<int>(this->inputs_.size());
 	}
 
-	int InferImpl::num_output() {
+	int InferImpl::num_output() const {
 		return static_cast<int>(this->outputs_.size());
 	}
 
@@ -389,37 +395,37 @@ namespace TRT {
 		this->orderdBlobs_[order_index] = tensor;
 	}
 
-	std::shared_ptr<Tensor> InferImpl::input(int index) {
+	std::shared_ptr<Tensor> InferImpl::input(int index) const {
 		if(index < 0 || index >= inputs_.size()){
 			INFOF("Input index[%d] out of range [size=%d]", index, inputs_.size());
 		}
 		return this->inputs_[index];
 	}
 
-	std::string InferImpl::get_input_name(int index){
+	std::string InferImpl::get_input_name(int index) const {
 		if(index < 0 || index >= inputs_name_.size()){
 			INFOF("Input index[%d] out of range [size=%d]", index, inputs_name_.size());
 		}
 		return inputs_name_[index];
 	}
 
-	std::shared_ptr<Tensor> InferImpl::output(int index) {
+	std::shared_ptr<Tensor> InferImpl::output(int index) const {
 		if(index < 0 || index >= outputs_.size()){
 			INFOF("Output index[%d] out of range [size=%d]", index, outputs_.size());
 		}
 		return outputs_[index];
 	}
 
-	std::string InferImpl::get_output_name(int index){
+	std::string InferImpl::get_output_name(int index) const {
 		if(index < 0 || index >= outputs_name_.size()){
 			INFOF("Output index[%d] out of range [size=%d]", index, outputs_name_.size());
 		}
 		return outputs_name_[index];
 	}
 
-	int InferImpl::get_max_batch_size() {
-		Assert(this->context_ != nullptr);
-		return this->context_->engine_->getMaxBatchSize();
+	int InferImpl::get_max_batch_size() const {
+		Assert(this->context_ != nullptr && max_batch_size_ != 0);
+		return max_batch_size_;
 	}
 
 	std::shared_ptr<Tensor> InferImpl::tensor(const std::string& name) {
@@ -431,7 +437,7 @@ namespace TRT {
 		return orderdBlobs_[node->second];
 	}
 
-	std::shared_ptr<Infer> load_infer_from_memory(const void* pdata, size_t size){
+	std::shared_ptr<Infer> load_infer_from_memory(const void* pdata, size_t size) {
 
 		std::shared_ptr<InferImpl> Infer(new InferImpl());
 		if (!Infer->load_from_memory(pdata, size))

@@ -1,0 +1,18 @@
+[submodule "third_party/googletest"]
+	path = third_party/googletest
+	url = https://github.com/google/googletest.git
+[submodule "windows/third_party/googletest"]
+	path = windows/third_party/googletest
+	url = https://github.com/google/googletest.git
+[submodule "third_party/mmdeploy"]
+	path = third_party/mmdeploy
+	url = https://github.com/open-mmlab/mmdeploy.git
+[submodule "third_party/amirstan_plugin"]
+	path = third_party/amirstan_plugin
+	url = https://github.com/zkccpro/amirstan_plugin.git
+[submodule "windows/third_party/mmdeploy"]
+	path = windows/third_party/mmdeploy
+	url = https://github.com/open-mmlab/mmdeploy.git
+[submodule "windows/third_party/amirstan_plugin_for_windows"]
+	path = windows/third_party/amirstan_plugin_for_windows
+	url = https://github.com/zkccpro/amirstan_plugin_for_windows.git

@@ -15,45 +15,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\application\app_alphapose.cpp" />
-    <ClCompile Include="src\application\app_alphapose\alpha_pose.cpp" />
-    <ClCompile Include="src\application\app_alphapose_old\alpha_pose_old.cpp" />
-    <ClCompile Include="src\application\app_arcface.cpp" />
-    <ClCompile Include="src\application\app_arcface\arcface.cpp" />
-    <ClCompile Include="src\application\app_centernet.cpp" />
-    <ClCompile Include="src\application\app_centernet\centernet.cpp" />
-    <ClCompile Include="src\application\app_dbface.cpp" />
-    <ClCompile Include="src\application\app_dbface\dbface.cpp" />
-    <ClCompile Include="src\application\app_fall_gcn\fall_gcn.cpp" />
-    <ClCompile Include="src\application\app_fall_recognize.cpp" />
-    <ClCompile Include="src\application\app_high_performance.cpp" />
-    <ClCompile Include="src\application\app_high_performance\alpha_pose_high_perf.cpp" />
-    <ClCompile Include="src\application\app_high_performance\high_performance.cpp" />
-    <ClCompile Include="src\application\app_high_performance\yolo_high_perf.cpp" />
-    <ClCompile Include="src\application\app_python\interface.cpp" />
-    <ClCompile Include="src\application\app_retinaface.cpp" />
-    <ClCompile Include="src\application\app_retinaface\retinaface.cpp" />
-    <ClCompile Include="src\application\app_scrfd.cpp" />
-    <ClCompile Include="src\application\app_scrfd\scrfd.cpp" />
-    <ClCompile Include="src\application\app_yolo.cpp" />
-    <ClCompile Include="src\application\app_bert.cpp" />
-    <ClCompile Include="src\application\app_yolo_gpuptr.cpp" />
-    <ClCompile Include="src\application\app_yolo_gpuptr\yolo_gpuptr.cpp" />
-    <ClCompile Include="src\application\test_warpaffine.cpp" />
-    <ClCompile Include="src\application\test_yolo_map.cpp" />
-    <ClCompile Include="src\application\app_plugin.cpp" />
-    <ClCompile Include="src\application\app_lesson.cpp" />
-    <ClCompile Include="src\application\app_yolo\yolo.cpp" />
-    <ClCompile Include="src\application\app_yolo\multi_gpu.cpp" />
-    <ClCompile Include="src\application\app_yolo_fast.cpp" />
-    <ClCompile Include="src\application\app_yolo_fast\yolo_fast.cpp" />
-    <ClCompile Include="src\application\tools\auto_download.cpp" />
-    <ClCompile Include="src\application\tools\deepsort.cpp" />
-    <ClCompile Include="src\direct\direct_mae.cpp" />
-    <ClCompile Include="src\direct\direct_unet.cpp" />
-    <ClCompile Include="src\direct\direct_yolo.cpp" />
-    <ClCompile Include="src\direct\direct_classifier.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\app\app.cpp" />
+    <ClCompile Include="src\app\detection.cpp" />
+    <ClCompile Include="src\app\pre_processing.cpp" />
     <ClCompile Include="src\tensorRT\builder\trt_builder.cpp" />
     <ClCompile Include="src\tensorRT\common\cuda_tools.cpp" />
     <ClCompile Include="src\tensorRT\common\ilogger.cpp" />
@@ -75,27 +39,33 @@
     <ClCompile Include="src\tensorRT\onnx_parser\RNNHelpers.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\ShapedWeights.cpp" />
     <ClCompile Include="src\tensorRT\onnx_parser\ShapeTensor.cpp" />
+    <ClCompile Include="test\base_test.cpp" />
+    <ClCompile Include="test\benchmark.cpp" />
+    <ClCompile Include="test\detection_app_test.cpp" />
+    <ClCompile Include="test\main.cpp" />
+    <ClCompile Include="test\plugin_parser_test.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_bev_nms\trt_batched_bev_nms.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_nms\trt_batched_nms.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_rotated_nms\trt_batched_rotated_nms.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\batched_nms_kernel.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\instance_norm\trt_instance_norm.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention.cpp" />
+    <ClCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd.cpp" />
     <None Include="dll_export.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\application\app_alphapose\alpha_pose.hpp" />
-    <ClInclude Include="src\application\app_alphapose_old\alpha_pose_old.hpp" />
-    <ClInclude Include="src\application\app_arcface\arcface.hpp" />
-    <ClInclude Include="src\application\app_centernet\centernet.hpp" />
-    <ClInclude Include="src\application\app_dbface\dbface.hpp" />
-    <ClInclude Include="src\application\app_fall_gcn\fall_gcn.hpp" />
-    <ClInclude Include="src\application\app_high_performance\alpha_pose_high_perf.hpp" />
-    <ClInclude Include="src\application\app_high_performance\high_performance.hpp" />
-    <ClInclude Include="src\application\app_high_performance\yolo_high_perf.hpp" />
-    <ClInclude Include="src\application\app_retinaface\retinaface.hpp" />
-    <ClInclude Include="src\application\app_scrfd\scrfd.hpp" />
-    <ClInclude Include="src\application\app_yolo\yolo.hpp" />
-    <ClInclude Include="src\application\app_yolo\multi_gpu.hpp" />
-    <ClInclude Include="src\application\app_yolo_fast\yolo_fast.hpp" />
-    <ClInclude Include="src\application\app_yolo_gpuptr\yolo_gpuptr.hpp" />
-    <ClInclude Include="src\application\common\face_detector.hpp" />
-    <ClInclude Include="src\application\tools\deepsort.hpp" />
-    <ClInclude Include="src\application\tools\pybind11.hpp" />
+    <ClInclude Include="src\app\app.hpp" />
+    <ClInclude Include="src\app\detection.h" />
+    <ClInclude Include="src\app\pre_processing.h" />
     <ClInclude Include="src\tensorRT\builder\trt_builder.hpp" />
     <ClInclude Include="src\tensorRT\common\cuda_tools.hpp" />
     <ClInclude Include="src\tensorRT\common\ilogger.hpp" />
@@ -131,22 +101,68 @@
     <ClInclude Include="src\tensorRT\onnx_parser\toposort.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\trt_utils.hpp" />
     <ClInclude Include="src\tensorRT\onnx_parser\utils.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\common\modulated_deform_conv\modulated_deform_conv_cpu.h" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_bev_nms\trt_batched_bev_nms.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_nms\trt_batched_nms.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\batched_rotated_nms\trt_batched_rotated_nms.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\common_cuda_helper.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\nms\batched_nms_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\nms\cub_helper.h" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\nms\kernel.h" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\trt_plugin_base.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\trt_plugin_helper.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common\trt_serialize.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\instance_norm\trt_instance_norm.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention_kernel.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd.hpp" />
+    <ClInclude Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd_kernel.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\application\app_centernet\centernet_decode.cu" />
-    <CudaCompile Include="src\application\app_dbface\dbface_decode.cu" />
-    <CudaCompile Include="src\application\app_retinaface\retinaface_decode.cu" />
-    <CudaCompile Include="src\application\app_scrfd\scrfd_decode.cu" />
-    <CudaCompile Include="src\application\app_yolo\yolo_decode.cu" />
-    <CudaCompile Include="src\application\app_yolo_fast\yolov5_decode.cu" />
-    <CudaCompile Include="src\application\app_yolo_fast\yolox_decode.cu" />
-    <CudaCompile Include="src\application\app_yolo_gpuptr\yolo_gpuptr_decode.cu" />
     <CudaCompile Include="src\tensorRT\common\preprocess_kernel.cu" />
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\DCNv2.cu" />
+    <CudaCompile Include="src\tensorRT\onnxplugin\plugins\HSigmoid.cu" />
     <CudaCompile Include="src\tensorRT\onnxplugin\plugins\HSwish.cu" />
+    <CudaCompile Include="src\tensorRT\onnxplugin\plugins\ScatterND.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\bicubic_interpolate\trt_bicubic_interpolate_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\allClassNMS.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\allClassRotatedNMS.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\gatherNMSOutputs.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\permuteData.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\sortScoresPerClass.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\nms\sortScoresPerImage.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\common_impl\trt_cuda_helper.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\deform_conv\trt_deform_conv_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\gather_topk\gather_topk_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_priors\trt_grid_priors_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\grid_sampler\trt_grid_sampler_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\modulated_deform_conv\trt_modulated_deform_conv_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_roi_align\trt_multi_level_roi_align_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\multi_level_rotated_roi_align\trt_multi_level_rotated_roi_align_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\roi_align\trt_roi_align_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scaled_dot_product_attention\scaled_dot_product_attention_kernel.cu" />
+    <CudaCompile Include="third_party\mmdeploy\csrc\mmdeploy\backend_ops\tensorrt\scatternd\trt_scatternd_kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\tensorRT\onnx_parser\readme.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -160,7 +176,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -168,7 +184,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'" Label="Configuration">
@@ -199,24 +215,27 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/include;C:/Users/sia8/zkcc/cudnn-11.2;C:/Users/sia8/zkcc/opencv4.5.4/install/include;C:/Users/sia8/zkcc/TensorRT-7.2.3.4/include;C:/Users/sia8/zkcc/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>C:/Users/sia8/zkcc/TensorRT-7.2.3.4/lib;C:/Users/sia8/zkcc/opencv4.5.4/install/x64/vc16/lib;C:/Users/sia8/zkcc/cudnn-11.2/cuda;C:/Users/sia8/zkcc/protobuf3.11.4/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.4.3.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;third_party/amirstan_plugin_for_windows/include;third_party/amirstan_plugin_for_windows/src/plugin/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);./src/app;third_party/googletest/googletest/include;third_party/googletest/googlemock/include</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.4.3.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);third_party/googletest/build/lib/Debug</LibraryPath>
     <TargetName>$(ProjectName)d</TargetName>
-    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <ExcludePath>$(ExcludePath)</ExcludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/include;C:/Users/sia8/zkcc/cudnn-11.2;C:/Users/sia8/zkcc/opencv4.5.4/install/include;C:/Users/sia8/zkcc/TensorRT-7.2.3.4/include;C:/Users/sia8/zkcc/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>C:/Users/sia8/zkcc/TensorRT-7.2.3.4/lib;C:/Users/sia8/zkcc/opencv4.5.4/install/x64/vc16/lib;C:/Users/sia8/zkcc/cudnn-11.2/cuda;C:/Users/sia8/zkcc/protobuf3.11.4/lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3-trt8.2.2.1/include;./lean/opencv4.5.4/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);third_party/mmdeploy/csrc/mmdeploy/backend_ops/tensorrt/;third_party/mmdeploy/csrc/mmdeploy/backend_ops/tensorrt/common;third_party/mmdeploy/csrc/mmdeploy/backend_ops/common;third_party/googletest/googletest/include;third_party/googletest/googlemock/include;./src/app</IncludePath>
+    <LibraryPath>./lean/opencv4.5.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3-trt8.2.2.1/lib/x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <ExcludePath>$(CudaToolkitDir);$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>workspace</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>./lean/cuda10.1/include;./lean/cudnn8.2.2.26;./lean/opencv3.4.6/include;./lean/TensorRT-8.0.1.6/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;./src/application/tools/Eigen;./src/application;d:\ProgramData\Anaconda3\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>./lean/TensorRT-8.0.1.6/lib;./lean/opencv3.4.6/lib;./lean/cudnn8.2.2.26;./lean/protobuf3.11.4/lib;./lean/cuda10.1/lib;d:\ProgramData\Anaconda3\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>./lean/cuda11.3/include;./lean/cudnn8.0.4/include;./lean/opencv4.5.4/include;./lean/TensorRT8.2.2.1/include;./lean/protobuf3.11.4/include;./src;./src/tensorRT;./src/tensorRT/common;$(VC_IncludePath);$(WindowsSDK_IncludePath);src/tensorRT/amirstan_plugin/src/plugin/common;src/tensorRT/amirstan_plugin/include</IncludePath>
+    <LibraryPath>./lean/TensorRT8.2.2.1/lib;./lean/opencv4.5.4/lib;./lean/cudnn8.0.4/lib;./lean/protobuf3.11.4/lib;./lean/cuda11.3/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>libpytrtc</TargetName>
     <TargetExt>.pyd</TargetExt>
   </PropertyGroup>
@@ -233,14 +252,17 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <LanguageStandard>stdcpp14</LanguageStandard>
+      <AdditionalIncludeDirectories>./lean/cuda11.3/include</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world454d.lib</AdditionalDependencies>
+      <AdditionalDependencies>nvinfer_plugin.lib;opencv_world454d.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
-      <IgnoreSpecificDefaultLibraries>opencv_world346d.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>opencv_world346d.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>third_party/googletest/build/lib/Debug</AdditionalLibraryDirectories>
     </Link>
     <CudaCompile>
       <GPUDebugInfo>false</GPUDebugInfo>
@@ -264,20 +286,36 @@
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp14</LanguageStandard>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nvinfer_plugin.lib;opencv_world454.lib;gtest.lib;gmock.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>third_party/googletest/build/lib/Release;</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>opencv_world346.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <CudaCompile>
-      <CodeGeneration>compute_61,sm_61</CodeGeneration>
+      <CodeGeneration>compute_86,sm_86</CodeGeneration>
       <Defines>ONNX_ML</Defines>
+      <TargetMachinePlatform>32</TargetMachinePlatform>
+      <CudaRuntime>Static</CudaRuntime>
+      <AdditionalOptions>-gencode=arch=compute_86,code=sm_86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalCompilerOptions>
+      </AdditionalCompilerOptions>
     </CudaCompile>
+    <CudaLink>
+      <UseHostLibraryDirectories>true</UseHostLibraryDirectories>
+    </CudaLink>
+    <CudaLink>
+      <UseHostLibraryDependencies>true</UseHostLibraryDependencies>
+    </CudaLink>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Python|x64'">
     <ClCompile>

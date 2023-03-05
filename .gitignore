@@ -54,7 +54,7 @@ tutorial/2.0CenterNet_from_torch_trt/0_to_1_python_to_cuda/cpp_cuda_centernet/wo
 /windows/lean
 /windows/.vs
 /windows/build
-/workspace
+/workspace/
 /lean
 /workspace/pro
 /build

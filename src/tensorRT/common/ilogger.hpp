@@ -20,6 +20,15 @@ namespace iLogger{
 
     using namespace std;
 
+    template<typename ... Args>
+    string string_format(const string& format, Args ... args){
+        size_t size = 1 + snprintf(nullptr, 0, format.c_str(), args ...);  // Extra space for \0
+        // unique_ptr<char[]> buf(new char[size]);
+        char bytes[size];
+        snprintf(bytes, size, format.c_str(), args ...);
+        return string(bytes);
+    }
+
     enum class LogLevel : int{
         Debug   = 5,
         Verbose = 4,
@@ -35,6 +44,14 @@ namespace iLogger{
     #define INFOW(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Warning, __VA_ARGS__)
     #define INFOE(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Error, __VA_ARGS__)
     #define INFOF(...)			iLogger::__log_func(__FILE__, __LINE__, iLogger::LogLevel::Fatal, __VA_ARGS__)
+    
+    // 推荐用下面这组，可支持std::string
+    #define FMT_INFOD(...)  INFOD(iLogger::string_format(__VA_ARGS__).c_str())
+    #define FMT_INFOV(...)  INFOV(iLogger::string_format(__VA_ARGS__).c_str())
+    #define FMT_INFO(...)   INFO(iLogger::string_format(__VA_ARGS__).c_str())
+    #define FMT_INFOW(...)  INFOW(iLogger::string_format(__VA_ARGS__).c_str())
+    #define FMT_INFOE(...)  INFOE(iLogger::string_format(__VA_ARGS__).c_str())
+    #define FMT_INFOF(...)  INFOF(iLogger::string_format(__VA_ARGS__).c_str())
 
     string date_now();
     string time_now();

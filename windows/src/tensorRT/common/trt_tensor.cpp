@@ -561,13 +561,14 @@ namespace TRT{
 
 		int width   = shape_[3];
 		int height  = shape_[2];
-		float scale = 1 / 255.0;
 		cv::Mat inputframe = image;
 		if(inputframe.size() != cv::Size(width, height))
 			cv::resize(inputframe, inputframe, cv::Size(width, height));
 
+		cv::cvtColor(inputframe, inputframe, cv::COLOR_BGR2RGB);
+
 		if(CV_MAT_DEPTH(inputframe.type()) != CV_32F){
-			inputframe.convertTo(inputframe, CV_32F, scale);
+			inputframe.convertTo(inputframe, CV_32F);
 		}
 
 		cv::Mat ms[3];
