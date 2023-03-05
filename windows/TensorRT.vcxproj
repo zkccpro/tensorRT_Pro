@@ -268,6 +268,8 @@
       <GPUDebugInfo>false</GPUDebugInfo>
       <CodeGeneration>compute_61,sm_61</CodeGeneration>
       <Defines>ONNX_ML</Defines>
+      <Include>
+      </Include>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -561,7 +561,6 @@ namespace TRT{
 
 		int width   = shape_[3];
 		int height  = shape_[2];
-
 		cv::Mat inputframe = image;
 		if(inputframe.size() != cv::Size(width, height))
 			cv::resize(inputframe, inputframe, cv::Size(width, height));
